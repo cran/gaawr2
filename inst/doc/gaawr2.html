@@ -1,0 +1,4587 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Genetic Association Analysis</title>
+
+<script src="gaawr2_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="gaawr2_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="gaawr2_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="gaawr2_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="gaawr2_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="gaawr2_files/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="gaawr2_files/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="gaawr2_files/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="gaawr2_files/navigation-1.1/tabsets.js"></script>
+<link href="gaawr2_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="gaawr2_files/highlightjs-9.12.0/highlight.js"></script>
+<script src="gaawr2_files/kePrint-0.0.1/kePrint.js"></script>
+<link href="gaawr2_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Genetic Association Analysis</h1>
+
+</div>
+
+
+<pre class="r"><code>pkgs &lt;- c(&quot;EnsDb.Hsapiens.v75&quot;,&quot;ensembldb&quot;,&quot;GMMAT&quot;,&quot;HardyWeinberg&quot;,&quot;MCMCglmm&quot;,&quot;SNPassoc&quot;,&quot;biomaRt&quot;,
+           &quot;gap&quot;,&quot;gap.datasets&quot;,&quot;haplo.stats&quot;,&quot;powerEQTL&quot;,&quot;R2jags&quot;,&quot;regress&quot;,
+           &quot;dplyr&quot;,&quot;ggplot2&quot;,&quot;httr&quot;,&quot;jsonlite&quot;,&quot;kableExtra&quot;,&quot;knitr&quot;,&quot;tidyr&quot;)
+for (p in pkgs) if (length(grep(paste(&quot;^package:&quot;, p, &quot;$&quot;, sep=&quot;&quot;), search())) == 0) {
+    if (!requireNamespace(p)) warning(paste0(&quot;This vignette needs package `&quot;, p, &quot;&#39;; please install&quot;))
+}
+invisible(suppressMessages(lapply(pkgs, require, character.only = TRUE)))
+sys_options &lt;- options()
+new_options &lt;- options(digits=2)</code></pre>
+<p>The package gathers information, meta-data and scripts in a two-part Henry-Stewart talk<span class="citation"><sup>1</sup></span>, which
+showcases analysis in aspects such as testing of polymorphic variant(s) for Hardy-Weinberg equilibrium,
+association with trait using genetic and statistical models as well as Bayesian implementation, power
+calculation in study design and genetic annotation. It also covers R integration with the Linux
+environment, GitHub, package creation and web applications.</p>
+<p>It is adapted from pQTLdata, <a href="https://jinghuazhao.github.io/pQTLdata/" class="uri">https://jinghuazhao.github.io/pQTLdata/</a>.</p>
+<div id="hello-world" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Hello, world!</h1>
+<p>We start with several ways of printting a <code>Hello, world!</code> message.</p>
+<div id="r" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> R</h2>
+<p>R can be started from either command line interface (CLI) or a graphical user interface (GUI),</p>
+<pre class="r"><code>print(&quot;Hello, world!\n&quot;)
+#&gt; [1] &quot;Hello, world!\n&quot;</code></pre>
+</div>
+<div id="linux" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Linux</h2>
+<p>As it is very powerful, we more often embed R in a Linux script as follows,</p>
+<pre class="bash"><code>export message=&quot;Hello, world!&quot;
+echo &quot;print(&#39;$message&#39;)&quot; &gt; hello.R
+R CMD BATCH hello.R
+R --no-save -q &lt; hello.R
+R --no-save -q &lt;&lt;END
+message &lt;- Sys.getenv(&quot;message&quot;); print(message)
+source(&quot;hello.R&quot;)
+END
+echo ${message} | \
+Rscript -e &#39;
+message &lt;- scan(&quot;stdin&quot;, what=&quot;&quot;, sep=&quot;\n&quot;, quiet=TRUE);
+write.table(message, col.names=FALSE, row.names=FALSE,
+            quote=FALSE)
+&#39; | \
+cat
+rm hello.*
+#&gt; &gt; print(&#39;Hello, world!&#39;)
+#&gt; [1] &quot;Hello, world!&quot;
+#&gt; &gt; 
+#&gt; &gt; message &lt;- Sys.getenv(&quot;message&quot;); print(message)
+#&gt; [1] &quot;Hello, world!&quot;
+#&gt; &gt; source(&quot;hello.R&quot;)
+#&gt; [1] &quot;Hello, world!&quot;
+#&gt; &gt; 
+#&gt; Hello, world!</code></pre>
+<p>where the backslash (<code>\</code>) is for line continuation.</p>
+<p>As shown in the example, one can take advantage of powerful data handling facilities in the Linux
+environment, through either Linux itself or software followed by their counterparts in R with
+options to feed back to the Linux envornment again for further use.</p>
+<p>Moreover, R could be an integrated component of a workflow, e.g., as curated in <strong>pQTLtools</strong>
+involving <strong>snakemake</strong>, <a href="https://jinghuazhao.github.io/pQTLtools/articles/snakemake.html" class="uri">https://jinghuazhao.github.io/pQTLtools/articles/snakemake.html</a>.</p>
+</div>
+</div>
+<div id="language-elements" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Language elements</h1>
+<p>Basic data manipulation of the <code>iris</code> data includes</p>
+<pre class="r"><code>class(iris)
+#&gt; [1] &quot;data.frame&quot;
+dim(iris)
+#&gt; [1] 150   5
+str(iris)
+#&gt; &#39;data.frame&#39;:    150 obs. of  5 variables:
+#&gt;  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+#&gt;  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+#&gt;  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+#&gt;  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+#&gt;  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+head(iris,1)
+#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+#&gt; 1          5.1         3.5          1.4         0.2  setosa
+tail(iris,1)
+#&gt;     Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+#&gt; 150          5.9           3          5.1         1.8 virginica</code></pre>
+<p>We would like to highlight two types of operators,</p>
+<ul>
+<li>the scope operator (<code>::</code>) is useful since user executes command from a particular package without loading it, which is usually faster.</li>
+<li>the native (<code>|&gt;</code>) and contributed (<code>%&gt;%</code>) pipe operators which enable a chained of operations, the latter popularized from R <strong>magrittr</strong> and <strong>dplyr</strong> packages</li>
+</ul>
+<pre class="r"><code>options(new_options)
+data(diabetes,package=&quot;gaawr2&quot;)
+
+mean_values &lt;- diabetes %&gt;%
+  dplyr::filter(CLASS %in% c(&quot;Y&quot;, &quot;N&quot;, &quot;P&quot;)) %&gt;%
+  dplyr::mutate(
+    Gender = dplyr::recode(Gender, &quot;F&quot; = &quot;Female&quot;, &quot;M&quot; = &quot;Male&quot;),
+    CLASS = dplyr::recode(CLASS, &quot;Y&quot; = &quot;Yes&quot;, &quot;N&quot; = &quot;No&quot;, &quot;P&quot; = &quot;Predicted&quot;)
+  ) %&gt;%
+  dplyr::group_by(CLASS, Gender) %&gt;%
+  dplyr::select(AGE:BMI) %&gt;%
+  dplyr::summarize(dplyr::across(dplyr::everything(), \(x) mean(x, na.rm = TRUE)))
+#&gt; Adding missing grouping variables: `CLASS`, `Gender`
+#&gt; `summarise()` has grouped output by &#39;CLASS&#39;. You can override using the
+#&gt; `.groups` argument.
+kableExtra::kbl(mean_values,caption=&quot;Mean value by gender and diabetes category&quot;) %&gt;%
+kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:diabetes">Table 2.1: </span>Mean value by gender and diabetes category
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+CLASS
+</th>
+<th style="text-align:left;">
+Gender
+</th>
+<th style="text-align:right;">
+AGE
+</th>
+<th style="text-align:right;">
+Urea
+</th>
+<th style="text-align:right;">
+Cr
+</th>
+<th style="text-align:right;">
+HbA1c
+</th>
+<th style="text-align:right;">
+Chol
+</th>
+<th style="text-align:right;">
+TG
+</th>
+<th style="text-align:right;">
+HDL
+</th>
+<th style="text-align:right;">
+LDL
+</th>
+<th style="text-align:right;">
+VLDL
+</th>
+<th style="text-align:right;">
+BMI
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+43.98438
+</td>
+<td style="text-align:right;">
+4.384375
+</td>
+<td style="text-align:right;">
+57.92188
+</td>
+<td style="text-align:right;">
+4.501563
+</td>
+<td style="text-align:right;">
+4.350000
+</td>
+<td style="text-align:right;">
+1.484375
+</td>
+<td style="text-align:right;">
+1.326563
+</td>
+<td style="text-align:right;">
+2.587500
+</td>
+<td style="text-align:right;">
+0.6906250
+</td>
+<td style="text-align:right;">
+22.50781
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+No
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+44.81579
+</td>
+<td style="text-align:right;">
+5.142105
+</td>
+<td style="text-align:right;">
+70.47368
+</td>
+<td style="text-align:right;">
+4.636842
+</td>
+<td style="text-align:right;">
+4.126316
+</td>
+<td style="text-align:right;">
+1.860526
+</td>
+<td style="text-align:right;">
+1.068421
+</td>
+<td style="text-align:right;">
+2.684210
+</td>
+<td style="text-align:right;">
+1.3736842
+</td>
+<td style="text-align:right;">
+22.09211
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Predicted
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+41.47059
+</td>
+<td style="text-align:right;">
+3.876471
+</td>
+<td style="text-align:right;">
+49.58824
+</td>
+<td style="text-align:right;">
+6.058823
+</td>
+<td style="text-align:right;">
+4.747059
+</td>
+<td style="text-align:right;">
+1.876471
+</td>
+<td style="text-align:right;">
+1.179412
+</td>
+<td style="text-align:right;">
+2.655882
+</td>
+<td style="text-align:right;">
+0.9823529
+</td>
+<td style="text-align:right;">
+24.17647
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Predicted
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+44.13889
+</td>
+<td style="text-align:right;">
+4.811111
+</td>
+<td style="text-align:right;">
+73.86111
+</td>
+<td style="text-align:right;">
+5.977778
+</td>
+<td style="text-align:right;">
+4.500000
+</td>
+<td style="text-align:right;">
+2.244444
+</td>
+<td style="text-align:right;">
+1.102778
+</td>
+<td style="text-align:right;">
+2.416667
+</td>
+<td style="text-align:right;">
+0.9833333
+</td>
+<td style="text-align:right;">
+23.81944
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+55.56780
+</td>
+<td style="text-align:right;">
+4.840678
+</td>
+<td style="text-align:right;">
+58.86158
+</td>
+<td style="text-align:right;">
+9.104407
+</td>
+<td style="text-align:right;">
+5.079096
+</td>
+<td style="text-align:right;">
+2.426554
+</td>
+<td style="text-align:right;">
+1.304237
+</td>
+<td style="text-align:right;">
+2.526441
+</td>
+<td style="text-align:right;">
+1.1115819
+</td>
+<td style="text-align:right;">
+30.61486
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Yes
+</td>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+55.25514
+</td>
+<td style="text-align:right;">
+5.491858
+</td>
+<td style="text-align:right;">
+77.91975
+</td>
+<td style="text-align:right;">
+8.719547
+</td>
+<td style="text-align:right;">
+4.866502
+</td>
+<td style="text-align:right;">
+2.476358
+</td>
+<td style="text-align:right;">
+1.136420
+</td>
+<td style="text-align:right;">
+2.679383
+</td>
+<td style="text-align:right;">
+2.6207819
+</td>
+<td style="text-align:right;">
+30.92420
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>
+mean_values_long &lt;- mean_values %&gt;%
+  tidyr::pivot_longer(
+    cols = AGE:BMI,
+    names_to = &quot;Variable&quot;,
+    values_to = &quot;Mean_Value&quot;
+  )
+ggplot2::ggplot(mean_values_long,
+  ggplot2::aes(x = Variable, y = Mean_Value, fill = CLASS)) +
+  ggplot2::geom_col(position = ggplot2::position_dodge()) +
+  ggplot2::facet_wrap(~ Gender) +
+  ggplot2::labs(
+    title = &quot;&quot;,
+    x = &quot;Variable&quot;,
+    y = &quot;Mean Value&quot;,
+    fill = &quot;Diabetes Status&quot; # Modified legend title for clarity
+  ) +
+  ggplot2::theme_bw() +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:diabetes"></span>
+<img src="gaawr2/diabetes-1.png" alt="Mean values by gender and diabetes category" width="672" style="display:block; margin: auto" />
+<p class="caption">
+Figure 2.1: Mean values by gender and diabetes category
+</p>
+</div>
+<pre class="r"><code>options(sys_options)</code></pre>
+<p>We see higher mean age and HbA1c values in the “Yes” diabetes group as well as noticeable differences in BMI, which align with
+the known associations between these variables and diabetes.</p>
+<p>The Comprehensive R Archive Network (CRAN) host and Bioconductor host many fined-tuned user-contributed packages, their installation is furnished through</p>
+<ul>
+<li><code>install.packages()</code> which is a standard way to install from CRAN</li>
+<li><code>BiocManager::install() which is the current approach to install package from the Bioconductor project.</code></li>
+<li>All packages, including those archived, can be installed with <code>devtools::install_github(cran/package-name)</code>, e.g., <strong>kinship</strong> and <strong>GenABEL</strong>.</li>
+</ul>
+</div>
+<div id="data-analysis" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Data analysis</h1>
+<p>Topics in this section underpins large-scale genome data analysis such as Genomewide association study (GWAS) and vary from those
+classic models such as <strong>mets</strong> for twin data to heavily featured in candidate gene studies, such as Hardy-Weinberg equilirium (HWE), to
+GWAS such as various types of association statistics, QQ/Manhattan/local association plots.</p>
+<p>There has been a lot of interests in machine learning (ML), artificial language (AI), including deep learning, just to add one more
+acronym, the bulk of which is also readily available.</p>
+<div id="hardyweinberg" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> HardyWeinberg</h2>
+<p>We set to run through the package for HWE. Three data sources are used: MN blood group in the documentation,
+a chromosome X SNP and a HLA/DQR,</p>
+<pre class="r"><code># MN blood group
+SNP &lt;- c(MM = 298, MN = 489, NN = 213)
+HardyWeinberg::maf(SNP)
+#&gt;      N 
+#&gt; 0.4575
+HardyWeinberg::HWTernaryPlot(SNP,region=0,grid=TRUE,markercol=&quot;blue&quot;)</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:hwe"></span>
+<img src="gaawr2/hwe-1.png" alt="SNP ternary plot" width="1497.6" style="display:block; margin: auto" />
+<p class="caption">
+Figure 3.1: SNP ternary plot
+</p>
+</div>
+<pre class="r"><code>HardyWeinberg::HWChisq(SNP, cc = 0, verbose = TRUE)
+#&gt; Chi-square test for Hardy-Weinberg equilibrium (autosomal)
+#&gt; Chi2 =  0.2214896 DF =  1 p-value =  0.6379073 D =  -3.69375 f =  0.01488253
+# Chromosome X
+xSNP &lt;- c(A=10, B=20, AA=30, AB=20, BB=10)
+HardyWeinberg::HWChisq(xSNP,cc=0,x.linked=TRUE,verbose=TRUE)
+#&gt; Chi-square test for Hardy-Weinberg equilibrium (X-chromosomal)
+#&gt; Chi2 =  14.86111 DF = 2 p-value =  0.0005928581 D =  NA f =  0.25
+# HLA/DQR
+DQR &lt;- gap.datasets::hla[,3:4]
+a1 &lt;- DQR[1]
+a2 &lt;- DQR[2]
+GenotypeCounts &lt;- HardyWeinberg::AllelesToTriangular(a1,a2)
+kableExtra::kbl(GenotypeCounts,caption=&quot;Genotype distribution of DQR&quot;) %&gt;%
+kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:hwe">Table 3.1: </span>Genotype distribution of DQR
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+A0
+</th>
+<th style="text-align:right;">
+A1
+</th>
+<th style="text-align:right;">
+A10
+</th>
+<th style="text-align:right;">
+A11
+</th>
+<th style="text-align:right;">
+A12
+</th>
+<th style="text-align:right;">
+A13
+</th>
+<th style="text-align:right;">
+A14
+</th>
+<th style="text-align:right;">
+A15
+</th>
+<th style="text-align:right;">
+A16
+</th>
+<th style="text-align:right;">
+A17
+</th>
+<th style="text-align:right;">
+A18
+</th>
+<th style="text-align:right;">
+A19
+</th>
+<th style="text-align:right;">
+A2
+</th>
+<th style="text-align:right;">
+A20
+</th>
+<th style="text-align:right;">
+A21
+</th>
+<th style="text-align:right;">
+A22
+</th>
+<th style="text-align:right;">
+A23
+</th>
+<th style="text-align:right;">
+A24
+</th>
+<th style="text-align:right;">
+A25
+</th>
+<th style="text-align:right;">
+A3
+</th>
+<th style="text-align:right;">
+A4
+</th>
+<th style="text-align:right;">
+A6
+</th>
+<th style="text-align:right;">
+A7
+</th>
+<th style="text-align:right;">
+A8
+</th>
+<th style="text-align:right;">
+A9
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+A0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A10
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A11
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A12
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A13
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A14
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A15
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A16
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A17
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A18
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A19
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A20
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A21
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A22
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A23
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A24
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A25
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A6
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A7
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A8
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+A9
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>HardyWeinberg::HWPerm.mult(GenotypeCounts,nperm=300)
+#&gt; Permutation test for Hardy-Weinberg equilibrium (autosomal).
+#&gt; 25 alleles detected.
+#&gt; Observed statistic: 1.461325e-84   300 permutations. p-value: 0.01
+HardyWeinberg::HWStr(hla[,3:4],test=&quot;permutation&quot;,nperm=300)
+#&gt; 1 STRs detected.
+#&gt;      STR   N Nt     MinorAF   MajorAF        Ho        He       Hp       pval
+#&gt; 1 DQR.a1 271 25 0.001845018 0.1494465 0.8856089 0.9097643 2.654949 0.02666667</code></pre>
+<p>The MN locus is seen to be close to the HWE line from the ternary plot. Only 300 permutations are done for the HLA/DQR data to illustrate.</p>
+</div>
+<div id="snpassoc" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> SNPassoc</h2>
+<p>The package implements procedures which are appropriate for candidate gene association analysis, under a variety of genetic models.</p>
+<p>Fist we look at some meta-data, include HWE.</p>
+<pre class="r"><code>data(asthma, package = &quot;SNPassoc&quot;)
+str(asthma, list.len=8)
+#&gt; &#39;data.frame&#39;:    1578 obs. of  57 variables:
+#&gt;  $ country    : Factor w/ 10 levels &quot;Australia&quot;,&quot;Belgium&quot;,..: 5 5 5 5 5 5 5 5 5 5 ...
+#&gt;  $ gender     : Factor w/ 2 levels &quot;Females&quot;,&quot;Males&quot;: 2 2 2 1 1 1 1 2 1 1 ...
+#&gt;  $ age        : num  42.8 50.2 46.7 47.9 48.4 ...
+#&gt;  $ bmi        : num  20.1 24.7 27.7 33.3 25.2 ...
+#&gt;  $ smoke      : int  1 0 0 0 0 1 0 0 0 0 ...
+#&gt;  $ casecontrol: int  0 0 0 0 1 0 0 0 0 0 ...
+#&gt;  $ rs4490198  : Factor w/ 3 levels &quot;AA&quot;,&quot;AG&quot;,&quot;GG&quot;: 3 3 3 2 2 2 3 2 2 2 ...
+#&gt;  $ rs4849332  : Factor w/ 3 levels &quot;GG&quot;,&quot;GT&quot;,&quot;TT&quot;: 3 2 3 2 1 2 3 3 2 1 ...
+#&gt;   [list output truncated]
+knitr::kable(asthma[1:3,1:8],caption=&quot;First three records &amp; two SNPs&quot;)</code></pre>
+<table>
+<caption><span id="tab:snpassoc1">Table 3.2: </span>First three records &amp; two SNPs</caption>
+<colgroup>
+<col width="11%" />
+<col width="9%" />
+<col width="12%" />
+<col width="12%" />
+<col width="8%" />
+<col width="16%" />
+<col width="14%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">country</th>
+<th align="left">gender</th>
+<th align="right">age</th>
+<th align="right">bmi</th>
+<th align="right">smoke</th>
+<th align="right">casecontrol</th>
+<th align="left">rs4490198</th>
+<th align="left">rs4849332</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Germany</td>
+<td align="left">Males</td>
+<td align="right">42.80630</td>
+<td align="right">20.14797</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="left">GG</td>
+<td align="left">TT</td>
+</tr>
+<tr class="even">
+<td align="left">Germany</td>
+<td align="left">Males</td>
+<td align="right">50.22861</td>
+<td align="right">24.69136</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">GG</td>
+<td align="left">GT</td>
+</tr>
+<tr class="odd">
+<td align="left">Germany</td>
+<td align="left">Males</td>
+<td align="right">46.68857</td>
+<td align="right">27.73230</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">GG</td>
+<td align="left">TT</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>snpCols &lt;- colnames(asthma)[6+(1:2)]
+snps &lt;- SNPassoc::setupSNP(data=asthma[snpCols], colSNPs=1:length(snpCols), sep=&quot;&quot;)
+head(snps)
+#&gt;   rs4490198 rs4849332
+#&gt; 1       G/G       T/T
+#&gt; 2       G/G       G/T
+#&gt; 3       G/G       T/T
+#&gt; 4       A/G       G/T
+#&gt; 5       A/G       G/G
+#&gt; 6       A/G       G/T
+summary(snps, print=FALSE)
+#&gt;           alleles major.allele.freq HWE      missing (%)
+#&gt; rs4490198 A/G     59.2              0.174133 0.6        
+#&gt; rs4849332 G/T     61.8              0.522060 0.1
+lapply(snps, head)
+#&gt; $rs4490198
+#&gt; [1] G/G G/G G/G A/G A/G A/G
+#&gt; Genotypes: A/A A/G G/G
+#&gt; Alleles:  G A 
+#&gt; 
+#&gt; $rs4849332
+#&gt; [1] T/T G/T T/T G/T G/G G/T
+#&gt; Genotypes: G/G G/T T/T
+#&gt; Alleles:  T G
+lapply(snps, summary)
+#&gt; $rs4490198
+#&gt; Genotypes: 
+#&gt;      frequency percentage
+#&gt; A/A        562   35.84184
+#&gt; A/G        731   46.61990
+#&gt; G/G        275   17.53827
+#&gt; NA&#39;s        10           
+#&gt; 
+#&gt; Alleles: 
+#&gt;      frequency percentage
+#&gt; G         1281   40.84821
+#&gt; A         1855   59.15179
+#&gt; NA&#39;s        20           
+#&gt; 
+#&gt; HWE (p value): 0.1741325 
+#&gt; 
+#&gt; $rs4849332
+#&gt; Genotypes: 
+#&gt;      frequency percentage
+#&gt; G/G        609   38.61763
+#&gt; G/T        732   46.41725
+#&gt; T/T        236   14.96512
+#&gt; NA&#39;s         1           
+#&gt; 
+#&gt; Alleles: 
+#&gt;      frequency percentage
+#&gt; T         1204   38.17375
+#&gt; G         1950   61.82625
+#&gt; NA&#39;s         2           
+#&gt; 
+#&gt; HWE (p value): 0.5220596
+SNPassoc::tableHWE(snps)
+#&gt;           HWE (p value) flag
+#&gt; rs4490198 0.1741            
+#&gt; rs4849332 0.5221</code></pre>
+<p>where variable <code>snpCols</code> skips six columns of non-SNP data for two SNPs.</p>
+<p>We then turn to genetic models for the first one,</p>
+<pre class="r"><code>asthma.snps &lt;- asthma %&gt;%
+               dplyr::rename(cc=casecontrol) %&gt;%
+               SNPassoc::setupSNP(colSNPs=(6+1):ncol(.), sep=&quot;&quot;)
+# Model 1: Simple SNP association with BMI
+SNPassoc::association(bmi ~ rs4490198, data = asthma.snps)
+#&gt; 
+#&gt; SNP: rs4490198  adjusted by: 
+#&gt;                 n    me     se      dif   lower  upper p-value  AIC
+#&gt; Codominant                                                         
+#&gt; A/A           558 25.54 0.1764  0.00000                 0.8847 9015
+#&gt; A/G           725 25.56 0.1741  0.02169 -0.4614 0.5048             
+#&gt; G/G           273 25.41 0.2369 -0.12986 -0.7634 0.5037             
+#&gt; Dominant                                                           
+#&gt; A/A           558 25.54 0.1764  0.00000                 0.9319 9013
+#&gt; A/G-G/G       998 25.52 0.1421 -0.01977 -0.4731 0.4336             
+#&gt; Recessive                                                          
+#&gt; A/A-A/G      1283 25.55 0.1247  0.00000                 0.6261 9013
+#&gt; G/G           273 25.41 0.2369 -0.14212 -0.7137 0.4294             
+#&gt; Overdominant                                                       
+#&gt; A/A-G/G       831 25.50 0.1417  0.00000                 0.7723 9013
+#&gt; A/G           725 25.56 0.1741  0.06435 -0.3715 0.5002             
+#&gt; log-Additive                                                       
+#&gt; 0,1,2                          -0.05016 -0.3575 0.2571  0.7491 9013
+
+# Model 2: SNP association with case-control status
+SNPassoc::association(cc ~ rs4490198, data = asthma.snps)
+#&gt; 
+#&gt; SNP: rs4490198  adjusted by: 
+#&gt;                 0    %   1    %   OR lower upper p-value  AIC
+#&gt; Codominant                                                   
+#&gt; A/A           449 36.5 113 33.4 1.00              0.5277 1639
+#&gt; A/G           565 45.9 166 49.1 1.17  0.89  1.53             
+#&gt; G/G           216 17.6  59 17.5 1.09  0.76  1.55             
+#&gt; Dominant                                                     
+#&gt; A/A           449 36.5 113 33.4 1.00              0.2950 1638
+#&gt; A/G-G/G       781 63.5 225 66.6 1.14  0.89  1.48             
+#&gt; Recessive                                                    
+#&gt; A/A-A/G      1014 82.4 279 82.5 1.00              0.9640 1639
+#&gt; G/G           216 17.6  59 17.5 0.99  0.72  1.36             
+#&gt; Overdominant                                                 
+#&gt; A/A-G/G       665 54.1 172 50.9 1.00              0.3000 1638
+#&gt; A/G           565 45.9 166 49.1 1.14  0.89  1.45             
+#&gt; log-Additive                                                 
+#&gt; 0,1,2        1230 78.4 338 21.6 1.06  0.90  1.26  0.4951 1638
+
+# Model 3: SNP association with covariates (country and smoke)
+SNPassoc::association(cc ~ rs4490198 + country + smoke, data = asthma.snps)
+#&gt; 
+#&gt; SNP: rs4490198  adjusted by: country smoke 
+#&gt;                 0    %   1    %   OR lower upper p-value  AIC
+#&gt; Codominant                                                   
+#&gt; A/A           448 36.6 112 33.2 1.00              0.5414 1403
+#&gt; A/G           563 46.0 166 49.3 1.18  0.88  1.59             
+#&gt; G/G           213 17.4  59 17.5 1.08  0.73  1.60             
+#&gt; Dominant                                                     
+#&gt; A/A           448 36.6 112 33.2 1.00              0.3172 1401
+#&gt; A/G-G/G       776 63.4 225 66.8 1.15  0.87  1.52             
+#&gt; Recessive                                                    
+#&gt; A/A-A/G      1011 82.6 278 82.5 1.00              0.9091 1402
+#&gt; G/G           213 17.4  59 17.5 0.98  0.69  1.39             
+#&gt; Overdominant                                                 
+#&gt; A/A-G/G       661 54.0 171 50.7 1.00              0.2983 1401
+#&gt; A/G           563 46.0 166 49.3 1.15  0.88  1.50             
+#&gt; log-Additive                                                 
+#&gt; 0,1,2        1224 78.4 337 21.6 1.06  0.88  1.28  0.5382 1402
+
+# Model 4: SNP association with stratification by gender
+SNPassoc::association(cc ~ rs4490198 + survival::strata(gender), data = asthma.snps)
+#&gt; 
+#&gt; SNP: rs4490198  adjusted by: survival::strata(gender) 
+#&gt;                 0    %   1    %   OR lower upper p-value  AIC
+#&gt; Codominant                                                   
+#&gt; A/A           449 36.5 113 33.4 1.00              0.5523 1630
+#&gt; A/G           565 45.9 166 49.1 1.16  0.89  1.52             
+#&gt; G/G           216 17.6  59 17.5 1.10  0.77  1.57             
+#&gt; Dominant                                                     
+#&gt; A/A           449 36.5 113 33.4 1.00              0.2948 1629
+#&gt; A/G-G/G       781 63.5 225 66.6 1.15  0.89  1.48             
+#&gt; Recessive                                                    
+#&gt; A/A-A/G      1014 82.4 279 82.5 1.00              0.9417 1630
+#&gt; G/G           216 17.6  59 17.5 1.01  0.74  1.39             
+#&gt; Overdominant                                                 
+#&gt; A/A-G/G       665 54.1 172 50.9 1.00              0.3435 1629
+#&gt; A/G           565 45.9 166 49.1 1.12  0.88  1.43             
+#&gt; log-Additive                                                 
+#&gt; 0,1,2        1230 78.4 338 21.6 1.07  0.90  1.27  0.4546 1629
+
+# Model 5: SNP association with subset (only Spain)
+SNPassoc::association(cc ~ rs4490198, data = asthma.snps, subset = country == &quot;Spain&quot;)
+#&gt; 
+#&gt; SNP: rs4490198  adjusted by: 
+#&gt;                0    %  1    %   OR lower upper p-value   AIC
+#&gt; Codominant                                                  
+#&gt; A/A          141 43.3 18 37.5 1.00              0.6257 291.7
+#&gt; A/G          145 44.5 22 45.8 1.19  0.61  2.31              
+#&gt; G/G           40 12.3  8 16.7 1.57  0.63  3.87              
+#&gt; Dominant                                                    
+#&gt; A/A          141 43.3 18 37.5 1.00              0.4494 290.1
+#&gt; A/G-G/G      185 56.7 30 62.5 1.27  0.68  2.37              
+#&gt; Recessive                                                   
+#&gt; A/A-A/G      286 87.7 40 83.3 1.00              0.4104 290.0
+#&gt; G/G           40 12.3  8 16.7 1.43  0.62  3.27              
+#&gt; Overdominant                                                
+#&gt; A/A-G/G      181 55.5 26 54.2 1.00              0.8602 290.6
+#&gt; A/G          145 44.5 22 45.8 1.06  0.57  1.94              
+#&gt; log-Additive                                                
+#&gt; 0,1,2        326 87.2 48 12.8 1.24  0.80  1.91  0.3394 289.7
+
+# Model 6: Interaction between SNP (dominant model) and smoking
+SNPassoc::association(cc ~ SNPassoc::dominant(rs4490198) * factor(smoke), data = asthma.snps)
+#&gt; 
+#&gt;       SNP: SNPassoc::dominant(rs4490198  adjusted by: 
+#&gt;  Interaction 
+#&gt; ---------------------
+#&gt;           0       OR lower upper   1      OR lower upper
+#&gt; A/A     293  84 1.00    NA    NA 155 28 0.63  0.39  1.01
+#&gt; A/G-G/G 539 172 1.11  0.83   1.5 237 53 0.78  0.53  1.15
+#&gt; 
+#&gt; p interaction: 0.71994 
+#&gt; 
+#&gt;  factor(smoke) within SNPassoc::dominant(rs4490198 
+#&gt; ---------------------
+#&gt; A/A 
+#&gt;     0  1   OR lower upper
+#&gt; 0 293 84 1.00    NA    NA
+#&gt; 1 155 28 0.63  0.39  1.01
+#&gt; 
+#&gt; A/G-G/G 
+#&gt;     0   1  OR lower upper
+#&gt; 0 539 172 1.0    NA    NA
+#&gt; 1 237  53 0.7   0.5  0.99
+#&gt; 
+#&gt; p trend: 0.71994 
+#&gt; 
+#&gt;  SNPassoc::dominant(rs4490198 within factor(smoke) 
+#&gt; ---------------------
+#&gt; 0 
+#&gt;           0   1   OR lower upper
+#&gt; A/A     293  84 1.00    NA    NA
+#&gt; A/G-G/G 539 172 1.11  0.83   1.5
+#&gt; 
+#&gt; 1 
+#&gt;           0  1   OR lower upper
+#&gt; A/A     155 28 1.00    NA    NA
+#&gt; A/G-G/G 237 53 1.24  0.75  2.04
+#&gt; 
+#&gt; p trend: 0.71994
+
+# Model 7: Interaction between two SNPs (dominant model for rs4490198)
+SNPassoc::association(cc ~ rs4490198 * factor(rs11123242), data = asthma.snps, model.interaction = &quot;dominant&quot;)
+#&gt; 
+#&gt;       SNP: rs4490198  adjusted by: 
+#&gt;  Interaction 
+#&gt; ---------------------
+#&gt;         C/C       OR lower upper C/T       OR lower upper  0  1  T/T lower
+#&gt; A/A     448 113 1.00    NA    NA   1   0 0.00  0.00    NA  0  0   NA    NA
+#&gt; A/G-G/G 371 109 1.16  0.87  1.57 365 102 1.11  0.82   1.5 39 14 1.42  0.75
+#&gt;         upper
+#&gt; A/A        NA
+#&gt; A/G-G/G  2.71
+#&gt; 
+#&gt; p interaction: 0.5126 
+#&gt; 
+#&gt;  factor(rs11123242) within rs4490198 
+#&gt; ---------------------
+#&gt; A/A 
+#&gt;       0   1 OR lower upper
+#&gt; C/C 448 113  1    NA    NA
+#&gt; C/T   1   0  0     0    NA
+#&gt; T/T   0   0 NA    NA    NA
+#&gt; 
+#&gt; A/G-G/G 
+#&gt;       0   1   OR lower upper
+#&gt; C/C 371 109 1.00    NA    NA
+#&gt; C/T 365 102 0.95  0.70  1.29
+#&gt; T/T  39  14 1.22  0.64  2.33
+#&gt; 
+#&gt; p trend: 0.5126 
+#&gt; 
+#&gt;  rs4490198 within factor(rs11123242) 
+#&gt; ---------------------
+#&gt; C/C 
+#&gt;           0   1   OR lower upper
+#&gt; A/A     448 113 1.00    NA    NA
+#&gt; A/G-G/G 371 109 1.16  0.87  1.57
+#&gt; 
+#&gt; C/T 
+#&gt;           0   1 OR lower upper
+#&gt; A/A       1   0  1    NA    NA
+#&gt; A/G-G/G 365 102 NA     0    NA
+#&gt; 
+#&gt; T/T 
+#&gt;          0  1 OR lower upper
+#&gt; A/A      0  0  1    NA    NA
+#&gt; A/G-G/G 39 14 NA    NA    NA
+#&gt; 
+#&gt; p trend: 0.49958</code></pre>
+</div>
+<div id="haplo.stats" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> haplo.stats</h2>
+<p>This package considers haplotype estimation using EM-algorithms and genetic association under a generalized linear model (GLM).</p>
+<pre class="r"><code># Association with the first three SNPs
+snpsH &lt;- names(asthma.snps)[6+(1:3)]
+genoH &lt;- SNPassoc::make.geno(asthma.snps, snpsH)
+em &lt;- haplo.stats::haplo.em(genoH, locus.label = snpsH, miss.val = c(0, NA))
+haplo_table &lt;- with(em,cbind(haplotype,hap.prob))
+knitr::kable(haplo_table,caption=&quot;Haplotypes of the first three SNPs&quot;)</code></pre>
+<table>
+<caption><span id="tab:haplostats">Table 3.3: </span>Haplotypes of the first three SNPs</caption>
+<thead>
+<tr class="header">
+<th align="left">rs4490198</th>
+<th align="left">rs4849332</th>
+<th align="left">rs1367179</th>
+<th align="right">hap.prob</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="right">0.0003813</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="right">0.5593910</td>
+</tr>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="right">0.0004027</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="right">0.0306653</td>
+</tr>
+<tr class="odd">
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">2</td>
+<td align="right">0.0584815</td>
+</tr>
+<tr class="odd">
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="right">0.1851431</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="right">0.1655351</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>modH &lt;- haplo.stats::haplo.glm(cc ~ genoH, data=asthma.snps,
+                               family=&quot;binomial&quot;,
+                               locus.label=snpsH,
+                               allele.lev=attributes(genoH)$unique.alleles,
+                               control = haplo.stats::haplo.glm.control(haplo.freq.min=0.05))
+modH
+#&gt; 
+#&gt; Call:  haplo.stats::haplo.glm(formula = cc ~ genoH, family = &quot;binomial&quot;, 
+#&gt;     data = asthma.snps, locus.label = snpsH, control = haplo.stats::haplo.glm.control(haplo.freq.min = 0.05), 
+#&gt;     allele.lev = attributes(genoH)$unique.alleles)
+#&gt; 
+#&gt; Coefficients:
+#&gt; (Intercept)      genoH.6      genoH.7      genoH.8   genoH.rare  
+#&gt;   -1.322930     0.161274     0.083020    -0.027472    -0.191619  
+#&gt; 
+#&gt; Haplotypes:
+#&gt;            rs4490198 rs4849332 rs1367179 hap.freq
+#&gt; genoH.6            G         G         G 0.058479
+#&gt; genoH.7            G         T         C 0.185124
+#&gt; genoH.8            G         T         G 0.165551
+#&gt; genoH.rare         *         *         * 0.031456
+#&gt; haplo.base         A         G         G 0.559391
+#&gt; 
+#&gt; Degrees of Freedom:  1577 Total (i.e. Null);  1573 Residual
+#&gt; 
+#&gt;      Null Deviance:  1644.6 
+#&gt;  Residual Deviance:  1642.6 
+#&gt;                AIC:  1652.6
+SNPassoc::intervals(modH)
+#&gt;                freq   or   95%   C.I.   P-val 
+#&gt;          AGG 0.5594   1.00 Reference haplotype 
+#&gt;          GGG 0.0585   1.18 (   0.81 -   1.70 )  0.3937 
+#&gt;          GTC 0.1851   1.09 (   0.87 -   1.36 )  0.4669 
+#&gt;          GTG 0.1656   0.97 (   0.77 -   1.23 )  0.8198 
+#&gt;   genoH.rare 0.0315   0.83 (   0.47 -   1.44 )  0.5003
+
+# Model comparison with / without haplotypes
+mod.adj.ref &lt;- glm(cc ~ smoke, data=asthma.snps, family=&quot;binomial&quot;)
+mod.adj &lt;- haplo.glm(cc ~ genoH + smoke, data=asthma.snps,
+                 family=&quot;binomial&quot;,
+                 locus.label=snpsH,
+                 allele.lev=attributes(genoH3)$unique.alleles,
+                 control = haplo.stats::haplo.glm.control(haplo.freq.min=0.05))
+mod.adj
+#&gt; 
+#&gt; Call:  haplo.glm(formula = cc ~ genoH + smoke, family = &quot;binomial&quot;, 
+#&gt;     data = asthma.snps, locus.label = snpsH, control = haplo.stats::haplo.glm.control(haplo.freq.min = 0.05), 
+#&gt;     allele.lev = attributes(genoH3)$unique.alleles)
+#&gt; 
+#&gt; Coefficients:
+#&gt; (Intercept)      genoH.6      genoH.7      genoH.8   genoH.rare        smoke  
+#&gt;   -1.216221     0.144485     0.092058    -0.024518    -0.170104    -0.390860  
+#&gt; 
+#&gt; Haplotypes:
+#&gt;            rs4490198 rs4849332 rs1367179 hap.freq
+#&gt; genoH.6            G         G         G 0.058406
+#&gt; genoH.7            G         T         C 0.184673
+#&gt; genoH.8            G         T         G 0.165351
+#&gt; genoH.rare         *         *         * 0.031263
+#&gt; haplo.base         A         G         G 0.560307
+#&gt; 
+#&gt; Degrees of Freedom:  1570 Total (i.e. Null);  1565 Residual
+#&gt; 
+#&gt; Subjects removed by NAs in y or x, or all NA in geno
+#&gt;   yxmiss genomiss 
+#&gt;        7        0 
+#&gt; 
+#&gt;      Null Deviance:  1638.6 
+#&gt;  Residual Deviance:  1628.6 
+#&gt;                AIC:  1640.6
+lrt.adj &lt;- mod.adj.ref$deviance - mod.adj$deviance
+pchisq(lrt.adj, mod.adj$lrt$df, lower=FALSE)
+#&gt; [1] 0.8682086
+
+# Four variable slide windows over nine SNPs
+snpsH &lt;- labels(asthma.snps)[6+(1:9)]
+genoH &lt;- SNPassoc::make.geno(asthma.snps, snpsH)
+haploH &lt;- list()
+for (i in 1:4) haploH[[i]] &lt;- haplo.stats::haplo.score.slide(asthma.snps$cc, genoH,
+                              trait.type=&quot;binomial&quot;,
+                              n.slide=i,
+                              locus.label=snpsH,
+                              simulate=TRUE,
+                              sim.control=haplo.stats::score.sim.control(min.sim=50,max.sim=100))</code></pre>
+</div>
+<div id="gwas" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> GWAS</h2>
+<p>We return to the asthma data used in <strong>SNPassoc</strong>.</p>
+<pre class="r"><code>assoc &lt;- SNPassoc::WGassociation(cc, data=asthma.snps)
+assoc.adj &lt;- SNPassoc::WGassociation(cc ~ country + smoke, asthma.snps)
+assoc.maxstat &lt;- SNPassoc::maxstat(asthma.snps, cc)
+assoc %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(-comments) %&gt;%
+  knitr::kable(caption=&quot;SNP association&quot;)
+assoc.adj %&gt;%
+  as.data.frame() %&gt;%
+  dplyr::select(-comments) %&gt;%
+  knitr::kable(caption=&quot;with adjustment for contountry &amp; smoking&quot;)
+assoc.maxstat %&gt;%
+  `[`(,) %&gt;%
+  t() %&gt;%
+  knitr::kable(caption = &quot;Max stat association statistics&quot;)</code></pre>
+<p>where assoc.maxstat is coerced into a matrix later, but there appears problematic to knit though.</p>
+</div>
+<div id="gmmat" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> GMMAT</h2>
+<p>The following is modified slightly from the package vignette,</p>
+<pre class="r"><code>data(example,package=&quot;GMMAT&quot;)
+attach(example)
+model0 &lt;- GMMAT::glmmkin(disease ~ age + sex, data = pheno, kins = GRM,
+                         id = &quot;id&quot;, family = binomial(link = &quot;logit&quot;))
+model1 &lt;- GMMAT::glmmkin(fixed = trait ~ age + sex, data = pheno, kins = GRM,
+                         id = &quot;id&quot;, family = gaussian(link = &quot;identity&quot;))
+model2 &lt;- GMMAT::glmmkin(fixed = trait ~ age + sex, data = pheno, kins = GRM,
+                         id = &quot;id&quot;, groups = &quot;disease&quot;,
+                         family = gaussian(link = &quot;identity&quot;))
+snps &lt;- c(&quot;SNP10&quot;, &quot;SNP25&quot;, &quot;SNP1&quot;, &quot;SNP0&quot;)
+geno.file &lt;- system.file(&quot;extdata&quot;, &quot;geno.bgen&quot;, package = &quot;GMMAT&quot;)
+samplefile &lt;- system.file(&quot;extdata&quot;, &quot;geno.sample&quot;, package = &quot;GMMAT&quot;)
+outfile &lt;- &quot;glmm.score.txt&quot;
+GMMAT::glmm.score(model0, infile = geno.file, BGEN.samplefile = samplefile,
+                  outfile = outfile)
+read.delim(outfile) |&gt;
+     head(n=4) |&gt;
+     knitr::kable(caption=&quot;Score tests under GLMM on four SNPs&quot;,digits=2)</code></pre>
+<table>
+<caption><span id="tab:gmmat">Table 3.4: </span>Score tests under GLMM on four SNPs</caption>
+<thead>
+<tr class="header">
+<th align="left">SNP</th>
+<th align="left">RSID</th>
+<th align="right">CHR</th>
+<th align="right">POS</th>
+<th align="left">A1</th>
+<th align="left">A2</th>
+<th align="right">N</th>
+<th align="right">AF</th>
+<th align="right">SCORE</th>
+<th align="right">VAR</th>
+<th align="right">PVAL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">SNP1</td>
+<td align="left">SNP1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">T</td>
+<td align="left">A</td>
+<td align="right">393</td>
+<td align="right">0.97</td>
+<td align="right">-1.99</td>
+<td align="right">4.56</td>
+<td align="right">0.35</td>
+</tr>
+<tr class="even">
+<td align="left">SNP2</td>
+<td align="left">SNP2</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">A</td>
+<td align="left">C</td>
+<td align="right">400</td>
+<td align="right">0.50</td>
+<td align="right">3.51</td>
+<td align="right">46.33</td>
+<td align="right">0.61</td>
+</tr>
+<tr class="odd">
+<td align="left">SNP3</td>
+<td align="left">SNP3</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="left">C</td>
+<td align="left">A</td>
+<td align="right">400</td>
+<td align="right">0.79</td>
+<td align="right">0.53</td>
+<td align="right">30.60</td>
+<td align="right">0.92</td>
+</tr>
+<tr class="even">
+<td align="left">SNP4</td>
+<td align="left">SNP4</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="left">G</td>
+<td align="left">A</td>
+<td align="right">400</td>
+<td align="right">0.70</td>
+<td align="right">3.11</td>
+<td align="right">40.51</td>
+<td align="right">0.62</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>unlink(outfile)
+bed.file &lt;- system.file(&quot;extdata&quot;, &quot;geno.bed&quot;, package = &quot;GMMAT&quot;) |&gt;
+            tools::file_path_sans_ext()
+model.wald &lt;- GMMAT::glmm.wald(fixed = disease ~ age + sex, data = pheno,
+                               kins = GRM, id = &quot;id&quot;, family = binomial(link = &quot;logit&quot;),
+                               infile = bed.file, snps = snps)
+knitr::kable(model.wald,caption=&quot;Wald tests under GLMM on four SNPs&quot;)</code></pre>
+<table style="width:100%;">
+<caption><span id="tab:gmmat">Table 3.4: </span>Wald tests under GLMM on four SNPs</caption>
+<colgroup>
+<col width="5%" />
+<col width="7%" />
+<col width="3%" />
+<col width="5%" />
+<col width="3%" />
+<col width="3%" />
+<col width="5%" />
+<col width="12%" />
+<col width="14%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">CHR</th>
+<th align="left">SNP</th>
+<th align="left">cM</th>
+<th align="left">POS</th>
+<th align="left">A1</th>
+<th align="left">A2</th>
+<th align="right">N</th>
+<th align="right">AF</th>
+<th align="right">BETA</th>
+<th align="right">SE</th>
+<th align="right">PVAL</th>
+<th align="left">converged</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">SNP10</td>
+<td align="left">0</td>
+<td align="left">10</td>
+<td align="left">G</td>
+<td align="left">A</td>
+<td align="right">400</td>
+<td align="right">0.7675000</td>
+<td align="right">0.1397665</td>
+<td align="right">0.1740090</td>
+<td align="right">0.4218510</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">SNP25</td>
+<td align="left">0</td>
+<td align="left">25</td>
+<td align="left">C</td>
+<td align="left">A</td>
+<td align="right">400</td>
+<td align="right">0.8250000</td>
+<td align="right">0.0292076</td>
+<td align="right">0.1934447</td>
+<td align="right">0.8799861</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">SNP1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">T</td>
+<td align="left">A</td>
+<td align="right">393</td>
+<td align="right">0.9745547</td>
+<td align="right">-0.4566064</td>
+<td align="right">0.4909946</td>
+<td align="right">0.3523907</td>
+<td align="left">TRUE</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="left">SNP0</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>detach(example)</code></pre>
+<p>where both BGEN and PLINK binary file are illustrated.</p>
+</div>
+<div id="h2.jags" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> h2.jags</h2>
+<p>The function uses JAGS (<a href="https://mcmc-jags.sourceforge.io/" class="uri">https://mcmc-jags.sourceforge.io/</a>) for heritability estimation<span class="citation"><sup>2</sup></span>,</p>
+<pre class="r"><code>set.seed(1234567)
+meyer &lt;- within(gap.datasets::meyer,{
+         y[is.na(y)] &lt;- rnorm(length(y[is.na(y)]),mean(y,na.rm=TRUE),sd(y,na.rm=TRUE))
+         g1 &lt;- ifelse(generation==1,1,0)
+         g2 &lt;- ifelse(generation==2,1,0)
+         id &lt;- animal
+         animal &lt;- ifelse(!is.na(animal),animal,0)
+         dam &lt;- ifelse(!is.na(dam),dam,0)
+         sire &lt;- ifelse(!is.na(sire),sire,0)
+     })
+G &lt;- gap::kin.morgan(meyer)$kin.matrix*2
+r &lt;- regress::regress(y~-1+g1+g2,~G,data=meyer)
+r
+#&gt; Likelihood kernel: K = g1+g2
+#&gt; 
+#&gt; Maximized log likelihood with kernel K is  -843.962 
+#&gt; 
+#&gt; Linear Coefficients:
+#&gt;     Estimate Std. Error
+#&gt;  g1  222.994      1.429
+#&gt;  g2  238.558      1.760
+#&gt; 
+#&gt; Variance Coefficients:
+#&gt;     Estimate Std. Error
+#&gt;  G    31.672     13.777
+#&gt;  In   72.419     10.182
+with(r,gap::h2G(sigma,sigma.cov))
+#&gt; Vp = 104.091 SE = 9.925092 
+#&gt; h2G = 0.3042677 SE = 0.1147779
+eps &lt;- 0.001
+y &lt;- with(meyer,y)
+x &lt;- with(meyer,cbind(g1,g2))
+ex &lt;- gap::h2.jags(y,x,G,sigma.p=0.03,sigma.r=0.014,n.chains=1,n.iter=80)
+#&gt; Compiling model graph
+#&gt;    Resolving undeclared variables
+#&gt;    Allocating nodes
+#&gt; Graph information:
+#&gt;    Observed stochastic nodes: 306
+#&gt;    Unobserved stochastic nodes: 310
+#&gt;    Total graph size: 95805
+#&gt; 
+#&gt; Initializing model
+kableExtra::kbl(ex$BUGSoutput$summary,digits=2,caption=&quot;MCMC results for the Meyer data&quot;) %&gt;%
+kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:jags">Table 3.5: </span>MCMC results for the Meyer data
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+mean
+</th>
+<th style="text-align:right;">
+sd
+</th>
+<th style="text-align:right;">
+2.5%
+</th>
+<th style="text-align:right;">
+25%
+</th>
+<th style="text-align:right;">
+50%
+</th>
+<th style="text-align:right;">
+75%
+</th>
+<th style="text-align:right;">
+97.5%
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+b[1]
+</td>
+<td style="text-align:right;">
+222.19
+</td>
+<td style="text-align:right;">
+1.30
+</td>
+<td style="text-align:right;">
+219.79
+</td>
+<td style="text-align:right;">
+221.81
+</td>
+<td style="text-align:right;">
+222.13
+</td>
+<td style="text-align:right;">
+222.79
+</td>
+<td style="text-align:right;">
+224.78
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+b[2]
+</td>
+<td style="text-align:right;">
+237.55
+</td>
+<td style="text-align:right;">
+1.67
+</td>
+<td style="text-align:right;">
+234.67
+</td>
+<td style="text-align:right;">
+236.62
+</td>
+<td style="text-align:right;">
+237.46
+</td>
+<td style="text-align:right;">
+238.76
+</td>
+<td style="text-align:right;">
+240.59
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+deviance
+</td>
+<td style="text-align:right;">
+2181.50
+</td>
+<td style="text-align:right;">
+22.18
+</td>
+<td style="text-align:right;">
+2141.86
+</td>
+<td style="text-align:right;">
+2166.83
+</td>
+<td style="text-align:right;">
+2181.90
+</td>
+<td style="text-align:right;">
+2197.92
+</td>
+<td style="text-align:right;">
+2218.65
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+h2
+</td>
+<td style="text-align:right;">
+0.30
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+<td style="text-align:right;">
+0.31
+</td>
+<td style="text-align:right;">
+0.36
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+p
+</td>
+<td style="text-align:right;">
+32.05
+</td>
+<td style="text-align:right;">
+8.48
+</td>
+<td style="text-align:right;">
+19.03
+</td>
+<td style="text-align:right;">
+25.03
+</td>
+<td style="text-align:right;">
+32.30
+</td>
+<td style="text-align:right;">
+38.19
+</td>
+<td style="text-align:right;">
+43.51
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+r
+</td>
+<td style="text-align:right;">
+72.73
+</td>
+<td style="text-align:right;">
+8.12
+</td>
+<td style="text-align:right;">
+61.56
+</td>
+<td style="text-align:right;">
+66.39
+</td>
+<td style="text-align:right;">
+71.99
+</td>
+<td style="text-align:right;">
+79.09
+</td>
+<td style="text-align:right;">
+87.36
+</td>
+</tr>
+</tbody>
+</table>
+<p>To avoid multithread and excessive time for CRAN checking, only one chain and 80 iterations are run, 40 of which are burn-ins and
+every iteraction is kept (n.thin=1).</p>
+</div>
+<div id="powereqtl" class="section level2" number="3.7">
+<h2><span class="header-section-number">3.7</span> powerEQTL</h2>
+<p>Consider <code>powereQTL.SLR</code> (simple linear regression) for a sample size of 50-300 by 50, minor allele frequencies
+0.005~0.5, <span class="math inline">\(\alpha\)</span>=0.05. We have,</p>
+<pre class="r"><code>n.designs &lt;- 6
+designs &lt;- 1:n.designs
+N &lt;- 50 * designs
+n.grids &lt;- 100
+index &lt;- 1:n.grids
+grids &lt;- index / n.grids
+MAF &lt;- seq(0.005, n.grids/2, by=0.5) / n.grids
+plot(MAF,grids,type=&quot;n&quot;,ylab=&quot;Power&quot;)
+mtext(expression(paste(&quot;(&quot;,alpha,&quot; = 0.05)&quot;)),1,line=4.5)
+colors &lt;- grDevices::hcl.colors(n.designs)
+for (design in designs)
+{
+  power.SLR &lt;- rep(NA,n.grids)
+  for (j in index) power.SLR[j] &lt;- powerEQTL::powerEQTL.SLR(MAF = MAF[j], FWER = 0.05, nTests = 240, slope = 0.13,
+                                                            n = N[design], sigma.y = 0.13)
+  lines(MAF,power.SLR,col=colors[design])
+}
+legend(&quot;bottomright&quot;, inset=.02, title=&quot;Sample size (N)&quot;, paste(N), col=colors, horiz=FALSE, cex=0.8, lty=designs)</code></pre>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:eqtl"></span>
+<img src="gaawr2/eqtl-1.png" alt="Power Estimation for eQTL Studies of 240 SNPs" width="768" style="display:block; margin: auto" />
+<p class="caption">
+Figure 3.2: Power Estimation for eQTL Studies of 240 SNPs
+</p>
+</div>
+<p>The counterpart for single-cell RNA-Seq design is via <code>powerEQTL.scRNAseq</code>.</p>
+</div>
+</div>
+<div id="annotations" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Annotations</h1>
+<div id="ensdb.hsapiens.v75" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> EnsDb.Hsapiens.v75</h2>
+<pre class="r"><code>ensembldb::metadata(EnsDb.Hsapiens.v75)
+#&gt;                  name                               value
+#&gt; 1             Db type                               EnsDb
+#&gt; 2     Type of Gene ID                     Ensembl Gene ID
+#&gt; 3  Supporting package                           ensembldb
+#&gt; 4       Db created by ensembldb package from Bioconductor
+#&gt; 5      script_version                               0.3.0
+#&gt; 6       Creation time            Thu May 18 09:15:45 2017
+#&gt; 7     ensembl_version                                  75
+#&gt; 8        ensembl_host                           localhost
+#&gt; 9            Organism                        homo_sapiens
+#&gt; 10        taxonomy_id                                9606
+#&gt; 11       genome_build                              GRCh37
+#&gt; 12    DBSCHEMAVERSION                                 2.0
+genes &lt;- ensembldb::genes(EnsDb.Hsapiens.v75)
+head(genes)
+#&gt; GRanges object with 6 ranges and 6 metadata columns:
+#&gt;                   seqnames      ranges strand |         gene_id   gene_name
+#&gt;                      &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |     &lt;character&gt; &lt;character&gt;
+#&gt;   ENSG00000223972        1 11869-14412      + | ENSG00000223972     DDX11L1
+#&gt;   ENSG00000227232        1 14363-29806      - | ENSG00000227232      WASH7P
+#&gt;   ENSG00000243485        1 29554-31109      + | ENSG00000243485  MIR1302-10
+#&gt;   ENSG00000237613        1 34554-36081      - | ENSG00000237613     FAM138A
+#&gt;   ENSG00000268020        1 52473-54936      + | ENSG00000268020      OR4G4P
+#&gt;   ENSG00000240361        1 62948-63887      + | ENSG00000240361     OR4G11P
+#&gt;                   gene_biotype seq_coord_system      symbol
+#&gt;                    &lt;character&gt;      &lt;character&gt; &lt;character&gt;
+#&gt;   ENSG00000223972   pseudogene       chromosome     DDX11L1
+#&gt;   ENSG00000227232   pseudogene       chromosome      WASH7P
+#&gt;   ENSG00000243485      lincRNA       chromosome  MIR1302-10
+#&gt;   ENSG00000237613      lincRNA       chromosome     FAM138A
+#&gt;   ENSG00000268020   pseudogene       chromosome      OR4G4P
+#&gt;   ENSG00000240361   pseudogene       chromosome     OR4G11P
+#&gt;                                            entrezid
+#&gt;                                              &lt;list&gt;
+#&gt;   ENSG00000223972               100287596,100287102
+#&gt;   ENSG00000227232                  100287171,653635
+#&gt;   ENSG00000243485 100422919,100422834,100422831,...
+#&gt;   ENSG00000237613              654835,645520,641702
+#&gt;   ENSG00000268020                              &lt;NA&gt;
+#&gt;   ENSG00000240361                              &lt;NA&gt;
+#&gt;   -------
+#&gt;   seqinfo: 273 sequences (1 circular) from GRCh37 genome
+transcripts_data &lt;- ensembldb::transcripts(EnsDb.Hsapiens.v75)
+head(transcripts_data)
+#&gt; GRanges object with 6 ranges and 6 metadata columns:
+#&gt;                   seqnames      ranges strand |           tx_id
+#&gt;                      &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |     &lt;character&gt;
+#&gt;   ENST00000456328        1 11869-14409      + | ENST00000456328
+#&gt;   ENST00000515242        1 11872-14412      + | ENST00000515242
+#&gt;   ENST00000518655        1 11874-14409      + | ENST00000518655
+#&gt;   ENST00000450305        1 12010-13670      + | ENST00000450305
+#&gt;   ENST00000438504        1 14363-29370      - | ENST00000438504
+#&gt;   ENST00000541675        1 14363-24886      - | ENST00000541675
+#&gt;                               tx_biotype tx_cds_seq_start tx_cds_seq_end
+#&gt;                              &lt;character&gt;        &lt;integer&gt;      &lt;integer&gt;
+#&gt;   ENST00000456328   processed_transcript             &lt;NA&gt;           &lt;NA&gt;
+#&gt;   ENST00000515242 transcribed_unproces..             &lt;NA&gt;           &lt;NA&gt;
+#&gt;   ENST00000518655 transcribed_unproces..             &lt;NA&gt;           &lt;NA&gt;
+#&gt;   ENST00000450305 transcribed_unproces..             &lt;NA&gt;           &lt;NA&gt;
+#&gt;   ENST00000438504 unprocessed_pseudogene             &lt;NA&gt;           &lt;NA&gt;
+#&gt;   ENST00000541675 unprocessed_pseudogene             &lt;NA&gt;           &lt;NA&gt;
+#&gt;                           gene_id         tx_name
+#&gt;                       &lt;character&gt;     &lt;character&gt;
+#&gt;   ENST00000456328 ENSG00000223972 ENST00000456328
+#&gt;   ENST00000515242 ENSG00000223972 ENST00000515242
+#&gt;   ENST00000518655 ENSG00000223972 ENST00000518655
+#&gt;   ENST00000450305 ENSG00000223972 ENST00000450305
+#&gt;   ENST00000438504 ENSG00000227232 ENST00000438504
+#&gt;   ENST00000541675 ENSG00000227232 ENST00000541675
+#&gt;   -------
+#&gt;   seqinfo: 273 sequences (1 circular) from GRCh37 genome</code></pre>
+<p>One can also use <code>exons_data &lt;- ensembldb::exons(EnsDb.Hsapiens.v75);head(exons_data)</code> but it is skipped for being considerably longer.</p>
+</div>
+<div id="biomart" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> biomaRt</h2>
+<pre class="r"><code>if (!biomaRt::martBMCheck(mart)) {
+  stop(&quot;The BioMart service is currently unavailable.&quot;)
+}
+biomaRt::listMarts()
+ensembl &lt;- biomaRt::useMart(&quot;ensembl&quot;, dataset=&quot;hsapiens_gene_ensembl&quot;, host=&quot;grch37.ensembl.org&quot;, path=&quot;/biomart/martservice&quot;)
+biomaRt::listDatasets(ensembl)
+attr &lt;- biomaRt::listAttributes(ensembl)
+attr_select &lt;- c(&#39;ensembl_gene_id&#39;, &#39;chromosome_name&#39;, &#39;start_position&#39;, &#39;end_position&#39;, &#39;description&#39;, &#39;hgnc_symbol&#39;,
+                 &#39;transcription_start_site&#39;)
+gene &lt;- biomaRt::getBM(attributes = attr_select, mart = ensembl)
+filter &lt;- biomaRt::listFilters(ensembl)
+biomaRt::searchFilters(mart = ensembl, pattern = &quot;gene&quot;)
+# GRCh38
+ensembl &lt;- biomaRt::useMart(&quot;ensembl&quot;, dataset=&quot;hsapiens_gene_ensembl&quot;)</code></pre>
+</div>
+<div id="experimental-factor-ontology-efo" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Experimental Factor Ontology (EFO)</h2>
+<p>The ontology of traits/disease is formally available as this<span class="citation"><sup>3</sup></span>. The script below assumes that efo-3.26.0 has been downloaded.</p>
+<pre class="r"><code>library(ontologyIndex)
+id &lt;- function(ontology)
+{
+  inflammatory &lt;- grep(ontology$name,pattern=&quot;inflammatory&quot;)
+  immune &lt;- grep(ontology$name,pattern=&quot;immune&quot;)
+  inf &lt;- union(inflammatory,immune)
+  list(id=ontology$id[inf],name=ontology$name[inf])
+}
+# GO
+data(go)
+goidname &lt;- id(go)
+# EFO
+file &lt;- &quot;efo.obo&quot; # efo-3.26.0
+get_relation_names(file)
+efo &lt;- get_ontology(file, extract_tags=&quot;everything&quot;)
+length(efo) # 89
+length(efo$id) # 27962
+efoidname &lt;- id(efo)
+diseases &lt;- get_descendants(efo,&quot;EFO:0000408&quot;)
+efo_0000540 &lt;- get_descendants(efo,&quot;EFO:0000540&quot;)
+efo_0000540name &lt;- efo$name[efo_0000540]
+isd &lt;- data.frame(efo_0000540,efo_0000540name)
+library(ontologyPlot)
+onto_plot(efo,efo_0000540)</code></pre>
+</div>
+<div id="opentargets" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> OpenTargets</h2>
+<pre class="r"><code>gene_id &lt;- &quot;ENSG00000164308&quot;
+query_string = &quot;
+  query target($ensemblId: String!){
+    target(ensemblId: $ensemblId){
+      id
+      approvedSymbol
+      biotype
+      geneticConstraint {
+        constraintType
+        exp
+        obs
+        score
+        oe
+        oeLower
+        oeUpper
+      }
+      tractability {
+        label
+        modality
+        value
+      }
+    }
+  }
+&quot;
+base_url &lt;- &quot;https://api.platform.opentargets.org/api/v4/graphql&quot;
+variables &lt;- list(&quot;ensemblId&quot; = gene_id)
+post_body &lt;- list(query = query_string, variables = variables)
+r &lt;- httr::POST(url=base_url, body=post_body, encode=&#39;json&#39;)
+data &lt;- iconv(r, &quot;&quot;, &quot;ASCII&quot;)
+#&gt; No encoding supplied: defaulting to UTF-8.
+content &lt;- jsonlite::fromJSON(data)
+target &lt;- content$data$target
+scalar_fields &lt;- data.frame(
+  Field = c(&quot;ID&quot;, &quot;Approved Symbol&quot;, &quot;Biotype&quot;),
+  Value = c(target$id, target$approvedSymbol, target$biotype)
+)
+tractability_data &lt;- target$tractability
+kableExtra::kbl(scalar_fields,caption=&quot;(a) Basic Information&quot;) %&gt;%
+kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ot">Table 4.1: </span>(a) Basic Information
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Field
+</th>
+<th style="text-align:left;">
+Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+ID
+</td>
+<td style="text-align:left;">
+ENSG00000164308
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Approved Symbol
+</td>
+<td style="text-align:left;">
+ERAP2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Biotype
+</td>
+<td style="text-align:left;">
+protein_coding
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kableExtra::kbl(target$geneticConstraint, caption=&quot;(b) Genetic Constraint Metrics&quot;) %&gt;%
+kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;))</code></pre>
+<table class="table table-striped table-hover" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ot">Table 4.1: </span>(b) Genetic Constraint Metrics
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+constraintType
+</th>
+<th style="text-align:right;">
+exp
+</th>
+<th style="text-align:right;">
+obs
+</th>
+<th style="text-align:right;">
+score
+</th>
+<th style="text-align:right;">
+oe
+</th>
+<th style="text-align:right;">
+oeLower
+</th>
+<th style="text-align:right;">
+oeUpper
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+syn
+</td>
+<td style="text-align:right;">
+185.590
+</td>
+<td style="text-align:right;">
+183
+</td>
+<td style="text-align:right;">
+0.14966
+</td>
+<td style="text-align:right;">
+0.98603
+</td>
+<td style="text-align:right;">
+0.873
+</td>
+<td style="text-align:right;">
+1.115
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+mis
+</td>
+<td style="text-align:right;">
+496.520
+</td>
+<td style="text-align:right;">
+501
+</td>
+<td style="text-align:right;">
+-0.07147
+</td>
+<td style="text-align:right;">
+1.00900
+</td>
+<td style="text-align:right;">
+0.937
+</td>
+<td style="text-align:right;">
+1.086
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lof
+</td>
+<td style="text-align:right;">
+48.461
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+0.00000
+</td>
+<td style="text-align:right;">
+0.92859
+</td>
+<td style="text-align:right;">
+0.730
+</td>
+<td style="text-align:right;">
+1.191
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>kableExtra::kbl(tractability_data,caption=&quot;(c) Tractability Information&quot;) %&gt;%
+kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), full_width = FALSE)</code></pre>
+<table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:ot">Table 4.1: </span>(c) Tractability Information
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+label
+</th>
+<th style="text-align:left;">
+modality
+</th>
+<th style="text-align:left;">
+value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Approved Drug
+</td>
+<td style="text-align:left;">
+SM
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Advanced Clinical
+</td>
+<td style="text-align:left;">
+SM
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phase 1 Clinical
+</td>
+<td style="text-align:left;">
+SM
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Structure with Ligand
+</td>
+<td style="text-align:left;">
+SM
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+High-Quality Ligand
+</td>
+<td style="text-align:left;">
+SM
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+High-Quality Pocket
+</td>
+<td style="text-align:left;">
+SM
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Med-Quality Pocket
+</td>
+<td style="text-align:left;">
+SM
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Druggable Family
+</td>
+<td style="text-align:left;">
+SM
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Approved Drug
+</td>
+<td style="text-align:left;">
+AB
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Advanced Clinical
+</td>
+<td style="text-align:left;">
+AB
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phase 1 Clinical
+</td>
+<td style="text-align:left;">
+AB
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+UniProt loc high conf
+</td>
+<td style="text-align:left;">
+AB
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO CC high conf
+</td>
+<td style="text-align:left;">
+AB
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+UniProt loc med conf
+</td>
+<td style="text-align:left;">
+AB
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+UniProt SigP or TMHMM
+</td>
+<td style="text-align:left;">
+AB
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GO CC med conf
+</td>
+<td style="text-align:left;">
+AB
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Human Protein Atlas loc
+</td>
+<td style="text-align:left;">
+AB
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Approved Drug
+</td>
+<td style="text-align:left;">
+PR
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Advanced Clinical
+</td>
+<td style="text-align:left;">
+PR
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phase 1 Clinical
+</td>
+<td style="text-align:left;">
+PR
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Literature
+</td>
+<td style="text-align:left;">
+PR
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+UniProt Ubiquitination
+</td>
+<td style="text-align:left;">
+PR
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Database Ubiquitination
+</td>
+<td style="text-align:left;">
+PR
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Half-life Data
+</td>
+<td style="text-align:left;">
+PR
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Small Molecule Binder
+</td>
+<td style="text-align:left;">
+PR
+</td>
+<td style="text-align:left;">
+TRUE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Approved Drug
+</td>
+<td style="text-align:left;">
+OC
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Advanced Clinical
+</td>
+<td style="text-align:left;">
+OC
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Phase 1 Clinical
+</td>
+<td style="text-align:left;">
+OC
+</td>
+<td style="text-align:left;">
+FALSE
+</td>
+</tr>
+</tbody>
+</table>
+<p>where <code>jsonlite::fromJSON(content(r,"text",encoding="UTF-8"))</code> also works when R is nicely compiled with libiconv.</p>
+</div>
+</div>
+<div id="additional-packages" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Additional packages</h1>
+<p>Packages <code>gwasrapidd</code> provides easy access to the GWAS Catalog, while <code>rentrez</code> enables search for GenBank and PubMed.</p>
+<p>An overview on proteogenomics is available<span class="citation"><sup>4</sup></span>. Some aspects of the analysis is given by <code>pQTLtools</code>,
+<a href="https://jinghuazhao.github.io/pQTLtools/" class="uri">https://jinghuazhao.github.io/pQTLtools/</a>.</p>
+</div>
+<div id="gaawr2" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> gaawr2</h1>
+<p>While created as a showcase of modern package development, like other R packages it includes data examples, customized functions,
+documentation and featured articles. The workflow is shown in the following diagram.</p>
+<div class="mermaid">
+graph TB; A[Package creation] --&gt; B[GitHub respository]; B --&gt; C[Pkgdown styling];C --&gt; D[Refinement];D --&gt; E[Testing]
+</div>
+<p>The relevant scripts are with <code>inst/scripts</code> directory in the source package. Briefly,</p>
+<ul>
+<li><code>gaawr2.R</code> creates the package in R.</li>
+<li><code>github.sh</code> creates <code>gaawr2</code> at GitHub from the command line.</li>
+<li><code>pkgdown.sh</code> makes a pkgdown-style package and this vignette is set to be processed with the <code>bookdown</code> package.</li>
+<li><code>docs.sh</code> adds, commits and pushes files to GitHub.</li>
+<li><code>cran.sh</code> build, install and check the package in CRAN-style.</li>
+</ul>
+<p>Note that for creation of the GitHub repository, an SSH key is assumed in place. In order for <code>pkgdown.sh</code> to function well, all
+required files such as <code>nature-genetics.csl</code> need to be available.</p>
+<p>Moreover, the <code>devtools::document()</code> in <code>pkgdown.sh</code> automatically updates NAMESPACE and regenerates documentation files (.Rd),
+which can be picked up through <code>pkgdown::build_reference()</code>. The refinement is greatly facilitated by GitHub <code>R-CMD-check.yaml</code>
+workflow, namely, <a href="https://github.com/jinghuazhao/gaawr2/actions/workflows/R-CMD-check.yaml" class="uri">https://github.com/jinghuazhao/gaawr2/actions/workflows/R-CMD-check.yaml</a>, e.g., flagging missing packages
+in package building.</p>
+<p>A GitHub login is still necessary to enable web pages, so that this can be accessed as <a href="https://jinghuazhao.github.io/gaawr2/" class="uri">https://jinghuazhao.github.io/gaawr2/</a>.
+Upon use <code>pkgdown</code>, an article can be seen from the menu item <code>Articles</code>.</p>
+<p>We carry on adding files such as <code>NEWS.md</code> and <code>_pkgdown.yml</code>, involing MathJax and mermaid:</p>
+<p>In line with various analyses we have covered, their associate packages are also added to the suggested list of packages in DESCRIPTION:</p>
+<pre><code>Suggests:
+    BLR,
+    BGLR,
+    biomaRt,
+    bookdown,
+    EnsDb.Hsapiens.v75,
+    ensembldb,
+    GMMAT,
+    HardyWeinberg,
+    haplo.stats,
+    httr,
+    httpuv,
+    jsonlite,
+    knitr,
+    kableExtra,
+    MCMCglmm,
+    plumber,
+    powerEQTL,
+    R2jags,
+    regress,
+    seqminer,
+    SNPassoc,
+    testthat,
+    tidyr</code></pre>
+</div>
+<div id="summary" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Summary</h1>
+<p>Following part I of the talk, we have further explored various aspects of genetic association analysis in
+R, particularly in the context of computing systems like Linux. While these serve as a solid foundation,
+a more in-depth data analysis coupled with more rigorous development is surely fruitful and rewarding.</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references csl-bib-body" line-spacing="2">
+<div id="ref-zhao09" class="csl-entry">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Zhao, J. H. <a href="https://doi.org/10.69645/DCRY5578">Genetic association analysis with <span>R</span></a>. <em>The Biomedical &amp; Life Sciences Collection</em> <strong>2009</strong>, e1002430 (2009).</div>
+</div>
+<div id="ref-zhao18" class="csl-entry">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Zhao, J. H., Luan, J. A. &amp; Congdon, P. <a href="https://doi.org/10.18637/jss.v085.i06">Bayesian linear mixed models with polygenic effects</a>. <em>Journal of Statistical Software</em> <strong>85</strong>, 1–27 (2018).</div>
+</div>
+<div id="ref-malone10" class="csl-entry">
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Malone, J. <em>et al.</em> <a href="https://doi.org/10.1093/bioinformatics/btq099">Modeling sample variables with an experimental factor ontology</a>. <em>Bioinformatics</em> <strong>26</strong>, 1112–1118 (2010).</div>
+</div>
+<div id="ref-suhre20" class="csl-entry">
+<div class="csl-left-margin">4. </div><div class="csl-right-inline">Suhre, K., McCarthy, M. I. &amp; Schwenk, J. M. Genetics meets proteomics: Perspectives for large population-based studies. <em>Nat Rev Genet</em> (2020) doi:<a href="https://doi.org/10.1038/s41576-020-0268-2">10.1038/s41576-020-0268-2</a>.</div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
