@@ -3,10 +3,12 @@ set.seed(0)
 knitr::opts_chunk$set(
   out.extra = 'style="display:block; margin: auto"',
   fig.align = "center",
+  fig.height = 8,
   fig.path = "gaawr2/",
+  fig.width = 8,
   collapse = TRUE,
   comment = "#>",
-  dev = "png")
+  dev = "CairoPNG")
 
 ## ----setup, message=FALSE, warning=FALSE--------------------------------------
 pkgs <- c("EnsDb.Hsapiens.v75","ensembldb","GMMAT","HardyWeinberg","MCMCglmm","SNPassoc","biomaRt",
@@ -65,7 +67,7 @@ ggplot2::ggplot(mean_values_long,
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 options(sys_options)
 
-## ----hwe, fig.cap="SNP ternary plot", fig.height=15.07, fig.width=15.6, messages=FALSE----
+## ----hwe, fig.cap="SNP ternary plot", fig.height=8, fig.width=10, messages=FALSE----
 # MN blood group
 SNP <- c(MM = 298, MN = 489, NN = 213)
 HardyWeinberg::maf(SNP)
@@ -278,4 +280,8 @@ kableExtra::kbl(target$geneticConstraint, caption="(b) Genetic Constraint Metric
 kableExtra::kable_styling(bootstrap_options = c("striped", "hover"))
 kableExtra::kbl(tractability_data,caption="(c) Tractability Information") %>%
 kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), full_width = FALSE)
+
+## ----desc, results="asis"-----------------------------------------------------
+suggests <- read.dcf(file = system.file("DESCRIPTION", package = "gaawr2"), fields = c("Suggests"))
+write.dcf(suggests)
 

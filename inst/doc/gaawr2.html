@@ -661,7 +661,7 @@ ggplot2::ggplot(mean_values_long,
   ggplot2::theme_bw() +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:diabetes"></span>
-<img src="gaawr2/diabetes-1.png" alt="Mean values by gender and diabetes category" width="672" style="display:block; margin: auto" />
+<img src="gaawr2/diabetes-1.png" alt="Mean values by gender and diabetes category" width="768" style="display:block; margin: auto" />
 <p class="caption">
 Figure 2.1: Mean values by gender and diabetes category
 </p>
@@ -694,7 +694,7 @@ HardyWeinberg::maf(SNP)
 #&gt; 0.4575
 HardyWeinberg::HWTernaryPlot(SNP,region=0,grid=TRUE,markercol=&quot;blue&quot;)</code></pre>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:hwe"></span>
-<img src="gaawr2/hwe-1.png" alt="SNP ternary plot" width="1497.6" style="display:block; margin: auto" />
+<img src="gaawr2/hwe-1.png" alt="SNP ternary plot" width="960" style="display:block; margin: auto" />
 <p class="caption">
 Figure 3.1: SNP ternary plot
 </p>
@@ -2815,7 +2815,7 @@ HardyWeinberg::HWStr(hla[,3:4],test=&quot;permutation&quot;,nperm=300)
 <div id="snpassoc" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> SNPassoc</h2>
 <p>The package implements procedures which are appropriate for candidate gene association analysis, under a variety of genetic models.</p>
-<p>Fist we look at some meta-data, include HWE.</p>
+<p>We first look at some meta-data, include HWE.</p>
 <pre class="r"><code>data(asthma, package = &quot;SNPassoc&quot;)
 str(asthma, list.len=8)
 #&gt; &#39;data.frame&#39;:    1578 obs. of  57 variables:
@@ -4455,33 +4455,18 @@ which can be picked up through <code>pkgdown::build_reference()</code>. The refi
 workflow, namely, <a href="https://github.com/jinghuazhao/gaawr2/actions/workflows/R-CMD-check.yaml" class="uri">https://github.com/jinghuazhao/gaawr2/actions/workflows/R-CMD-check.yaml</a>, e.g., flagging missing packages
 in package building.</p>
 <p>A GitHub login is still necessary to enable web pages, so that this can be accessed as <a href="https://jinghuazhao.github.io/gaawr2/" class="uri">https://jinghuazhao.github.io/gaawr2/</a>.
-Upon use <code>pkgdown</code>, an article can be seen from the menu item <code>Articles</code>.</p>
+Upon use of <code>pkgdown</code>, an article can be seen from the menu item <code>Articles</code>.</p>
 <p>We carry on adding files such as <code>NEWS.md</code> and <code>_pkgdown.yml</code>, involing MathJax and mermaid:</p>
+<pre><code>math-rendering: mathjax
+includes:
+  after_body: &lt;script type=&quot;module&quot;&gt;import mermaid from &quot;https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs&quot;;mermaid.initialize({});&lt;/script&gt;</code></pre>
 <p>In line with various analyses we have covered, their associate packages are also added to the suggested list of packages in DESCRIPTION:</p>
-<pre><code>Suggests:
-    BLR,
-    BGLR,
-    biomaRt,
-    bookdown,
-    EnsDb.Hsapiens.v75,
-    ensembldb,
-    GMMAT,
-    HardyWeinberg,
-    haplo.stats,
-    httr,
-    httpuv,
-    jsonlite,
-    knitr,
-    kableExtra,
-    MCMCglmm,
-    plumber,
-    powerEQTL,
-    R2jags,
-    regress,
-    seqminer,
-    SNPassoc,
-    testthat,
-    tidyr</code></pre>
+<pre class="r"><code>suggests &lt;- read.dcf(file = system.file(&quot;DESCRIPTION&quot;, package = &quot;gaawr2&quot;), fields = c(&quot;Suggests&quot;))
+write.dcf(suggests)</code></pre>
+<p>Suggests: BLR, BGLR, biomaRt, bookdown, Cairo, EnsDb.Hsapiens.v75,
+ensembldb, GMMAT, HardyWeinberg, haplo.stats, httr, httpuv,
+jsonlite, kableExtra, knitr, MCMCglmm, plumber, powerEQTL,
+R2jags, regress, seqminer, SNPassoc, testthat, tidyr</p>
 </div>
 <div id="summary" class="section level1" number="7">
 <h1><span class="header-section-number">7</span> Summary</h1>

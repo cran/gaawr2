@@ -1,11 +1,12 @@
 Package: gaawr2
 Title: Genetic Association Analysis
-Version: 0.0.2
-Date: 2025-2-20
+Version: 0.0.3
+Date: 2025-3-24
 Authors@R: c(person("Jing Hua", "Zhao", , role = c("aut", "cre"),
                   email = "jinghuazhao@hotmail.com",
                   comment = c(ORCID = "https://orcid.org/0000-0002-1463-5870", ORCID = "0000-0003-4930-3582")),
-           person("Benjamin", "Altmann", role = "ctb")
+           person("Benjamin", "Altmann", role = "ctb"),
+           person("Brian", "Ripley", role = "ctb")
            )
 Maintainer: Jing Hua Zhao <jinghuazhao@hotmail.com>
 Description: It gathers information, meta-data and scripts in a two-part Henry-Stewart talk by
@@ -25,15 +26,16 @@ LazyData: Yes
 LazyLoad: Yes
 LazyDataCompression: xz
 VignetteBuilder: knitr
-Suggests: BLR, BGLR, biomaRt, bookdown, EnsDb.Hsapiens.v75, ensembldb,
-        GMMAT, HardyWeinberg, haplo.stats, httr, httpuv, jsonlite,
-        kableExtra, knitr, MCMCglmm, plumber, powerEQTL, R2jags,
-        regress, seqminer, SNPassoc, testthat, tidyr
+Suggests: BLR, BGLR, biomaRt, bookdown, Cairo, EnsDb.Hsapiens.v75,
+        ensembldb, GMMAT, HardyWeinberg, haplo.stats, httr, httpuv,
+        jsonlite, kableExtra, knitr, MCMCglmm, plumber, powerEQTL,
+        R2jags, regress, seqminer, SNPassoc, testthat, tidyr
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2025-02-20 23:01:40 UTC; jhz22
+Packaged: 2025-03-24 14:21:47 UTC; jhz22
 Author: Jing Hua Zhao [aut, cre] (<https://orcid.org/0000-0002-1463-5870>,
     <https://orcid.org/0000-0003-4930-3582>),
-  Benjamin Altmann [ctb]
+  Benjamin Altmann [ctb],
+  Brian Ripley [ctb]
 Repository: CRAN
-Date/Publication: 2025-02-21 19:40:05 UTC
+Date/Publication: 2025-03-24 15:00:09 UTC

@@ -19,7 +19,13 @@ Rscript -e '
 
 # setup
 
-for d in gaawr2
+module load ceuadmin/R
+Rscript -e '
+# rmarkdown::render("pkgdown/index.Rmd", output_format = "md_document");
+  knitr::knit("README.Rmd");devtools::document();pkgdown::build_site()
+'
+
+for d in gaawr2 web
 do
     if [ -d vignettes/${d} ]; then
        rm -rf docs/articles/${d}

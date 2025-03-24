@@ -284,14 +284,49 @@ firefox http://127.0.0.1:8000</code></pre>
   })
 )</code></pre>
 <p>Upon accessing <code>http://127.0.0.1:8000</code>, we see the message “Hello, world!”.</p>
+</div>
+</div>
+<div id="url-availability" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> URL availability</h1>
+<p>This is an attempt to implement the following CRAN policy,</p>
+<blockquote>
+<p>Packages which use Internet resources should fail gracefully with an informative message if the resource is not available or has changed (and not give a check warning nor error).</p>
+</blockquote>
+<pre class="r"><code>check_url_availability &lt;- function(url) {
+# Send a GET request to the URL
+  response &lt;- tryCatch({
+    httr::GET(url)
+  }, error = function(e) {
+# If there was an error, return FALSE
+    return(NULL)
+  })
+# If response is NULL or status code is not 200, return FALSE
+  if (is.null(response) || httr::status_code(response) != 200) {
+    message(paste(&quot;Warning: The URL&quot;, url, &quot;is not accessible. Please check the link.&quot;))
+    return(FALSE)
+  }
+# If status code is 200, the URL is available
+  message(paste(&quot;The URL&quot;, url, &quot;is accessible.&quot;))
+  return(TRUE)
+}
+
+url_to_check &lt;- &quot;http://www.zotero.org/styles/nature-genetics&quot;
+is_available &lt;- check_url_availability(url_to_check)
+#&gt; The URL http://www.zotero.org/styles/nature-genetics is accessible.
+
+if (is_available) {
+  message(&quot;Using CSL as usual.&quot;)
+} else {
+  message(&quot;Using fallback to local CSL file instead.&quot;)
+}
+#&gt; Using CSL as usual.</code></pre>
 <p>Below, we assume that our working directory is the source package,</p>
 </div>
-</div>
-<div id="data-source" class="section level1" number="2">
-<h1><span class="header-section-number">2</span> Data source</h1>
+<div id="data-source" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Data source</h1>
 <p>We envisage a server from which data can be obtained, and two R packages <strong>plumber</strong> and <strong>httpuv</strong> are considered here.</p>
-<div id="a-meta-analysis" class="section level2" number="2.1">
-<h2><span class="header-section-number">2.1</span> A meta-analysis</h2>
+<div id="a-meta-analysis" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> A meta-analysis</h2>
 <p>The compressed data <code>IL.18R1-1.tbl.gz</code> is based on METAL<span class="citation"><sup>1</sup></span>, involving study-[1|2|3] as follows,</p>
 <pre><code>SEPARATOR TAB
 COLUMNCOUNTING STRICT
@@ -337,8 +372,8 @@ tabix -S1 -s1 -b2 -e2 -f ${protein}-1.tbl.gz
 rm ${protein}-1.tbl</code></pre>
 <p>The bgzipped data allows for access by genomic region as shown below.</p>
 </div>
-<div id="plumber" class="section level2" number="2.2">
-<h2><span class="header-section-number">2.2</span> plumber</h2>
+<div id="plumber" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> plumber</h2>
 <p>Software library <code>libsodium</code>, <a href="https://doc.libsodium.org/" class="uri">https://doc.libsodium.org/</a>, is required for its installation.</p>
 <p>It is <code>an API generator in R</code>, which has been tested as follows.</p>
 <pre class="r"><code>get_data &lt;- function(filename, region)
@@ -384,10 +419,10 @@ plbr$run(port = 8001)</code></pre>
 <pre><code>Running plumber API at http://127.0.0.1:8001
 Running swagger Docs at http://127.0.0.1:8001/__docs__/</code></pre>
 </div>
-<div id="data-access" class="section level2" number="2.3">
-<h2><span class="header-section-number">2.3</span> Data access</h2>
-<div id="browserconsole" class="section level3" number="2.3.1">
-<h3><span class="header-section-number">2.3.1</span> Browser/console</h3>
+<div id="data-access" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Data access</h2>
+<div id="browserconsole" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Browser/console</h3>
 <p>So we get query results in JSON format from</p>
 <ul>
 <li><strong>browser</strong>: <code>http://localhost:8001/tests?protein=IL.18R1&amp;region=2:102700000-103800000</code></li>
@@ -418,8 +453,8 @@ jq -r &#39;.[0] |
   curl command as above.
 )</code></pre>
 </div>
-<div id="r-1" class="section level3" number="2.3.2">
-<h3><span class="header-section-number">2.3.2</span> R</h3>
+<div id="r-1" class="section level3" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> R</h3>
 <p>The query above is easily furnished with <strong>curl</strong>:</p>
 <pre class="r"><code>tmp &lt;- tempfile()
 curl::curl_download(&quot;http://localhost:8001/tests?protein=IL.18R1&amp;region=2:102700000-103800000&quot;, tmp)
@@ -431,8 +466,8 @@ dim(df)</code></pre>
 <pre><code>[1] 4779   18</code></pre>
 </div>
 </div>
-<div id="httpuv" class="section level2" number="2.4">
-<h2><span class="header-section-number">2.4</span> httpuv</h2>
+<div id="httpuv" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> httpuv</h2>
 <p>The package gives a somewhat more involved version as follows,</p>
 <pre class="r"><code>dir.create(&quot;content/assets&quot;, recursive = TRUE)
 dir.create(&quot;content/lib&quot;, recursive = TRUE)
