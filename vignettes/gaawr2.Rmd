@@ -43,11 +43,17 @@ sys_options <- options()
 new_options <- options(digits=2)
 ```
 
-The package gathers information, meta-data and scripts in a two-part Henry-Stewart talk @zhao09, which
-showcases analysis in aspects such as testing of polymorphic variant(s) for Hardy-Weinberg equilibrium,
-association with trait using genetic and statistical models as well as Bayesian implementation, power
-calculation in study design and genetic annotation. It also covers R integration with the Linux
-environment, GitHub, package creation and web applications.
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+desc <- read.dcf(system.file("DESCRIPTION", package="gaawr2"))
+description <- desc[, "Description"]
+description <- gsub(
+  "(doi:[0-9\\.a-zA-Z]+/[0-9A-Z]+)",
+  "[\\1](https://doi.org/\\1)",
+  description
+)
+description <- gsub("\n+", " ", description)
+knitr::asis_output(description)
+```
 
 It is adapted from pQTLdata, <https://jinghuazhao.github.io/pQTLdata/>.
 
@@ -564,7 +570,7 @@ write.dcf(suggests)
 
 # Summary
 
-Following part I of the talk, we have further explored various aspects of genetic association analysis in
+Following the earlier talk, we have further explored various aspects of genetic association analysis in
 R, particularly in the context of computing systems like Linux. While these serve as a solid foundation,
 a more in-depth data analysis coupled with more rigorous development is surely fruitful and rewarding.
 

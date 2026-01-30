@@ -1,3 +1,17 @@
+## gaawr2 0.0.5
+
+(2026/1/30)
+
+* Replace CRAN-archived seqminer with Rsamples.
+
+## gaawr2 0.0.4
+
+(2026/1/29)
+
+* Add the latest citation.
+* Refine DESCRIPTION in accordance with Henry-Stewart talks.
+* Carry forward DESCRIPTION/Description to both README.Rmd and gaawr2.Rmd
+
 ## gaawr2 0.0.3
 
 (2025/3/24)

@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
   dev = "CairoPNG")
 
 ## ----echo=FALSE, message=FALSE, warning=FALSE---------------------------------
-pkgs <- c("httr","httpuv","jsonlite","plumber","seqminer")
+pkgs <- c("httr","httpuv","jsonlite","plumber","Rsamtools")
 for (p in pkgs) if (length(grep(paste("^package:", p, "$", sep=""), search())) == 0) {
     if (!requireNamespace(p)) warning(paste0("This vignette needs package `", p, "'; please install"))
 }

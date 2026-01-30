@@ -273,11 +273,7 @@ for (p in pkgs) if (length(grep(paste(&quot;^package:&quot;, p, &quot;$&quot;, s
 invisible(suppressMessages(lapply(pkgs, require, character.only = TRUE)))
 sys_options &lt;- options()
 new_options &lt;- options(digits=2)</code></pre>
-<p>The package gathers information, meta-data and scripts in a two-part Henry-Stewart talk<span class="citation"><sup>1</sup></span>, which
-showcases analysis in aspects such as testing of polymorphic variant(s) for Hardy-Weinberg equilibrium,
-association with trait using genetic and statistical models as well as Bayesian implementation, power
-calculation in study design and genetic annotation. It also covers R integration with the Linux
-environment, GitHub, package creation and web applications.</p>
+<p>This is a companion to Henry-Stewart talk by Zhao (2026, &lt;<a href="https://doi.org/doi:10.69645/FRFQ9519">doi:10.69645/FRFQ9519</a>&gt;), which gathers information, metadata and scripts to showcase modern genetic analysis – ranging from testing of polymorphic variant(s) for Hardy-Weinberg equilibrium, association with traits using genetic and statistical models, Bayesian implementation, power calculation in study design, and genetic annotation. It also covers R integration with the Linux environment, GitHub, package creation and web applications. The earlier version by Zhao (2009, &lt;<a href="https://doi.org/doi:10.69645/DCRY5578">doi:10.69645/DCRY5578</a>&gt;) provides an brief introduction to these topics.</p>
 <p>It is adapted from pQTLdata, <a href="https://jinghuazhao.github.io/pQTLdata/" class="uri">https://jinghuazhao.github.io/pQTLdata/</a>.</p>
 <div id="hello-world" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Hello, world!</h1>
@@ -701,12 +697,13 @@ Figure 3.1: SNP ternary plot
 </div>
 <pre class="r"><code>HardyWeinberg::HWChisq(SNP, cc = 0, verbose = TRUE)
 #&gt; Chi-square test for Hardy-Weinberg equilibrium (autosomal)
-#&gt; Chi2 =  0.2214896 DF =  1 p-value =  0.6379073 D =  -3.69375 f =  0.01488253
+#&gt; Chi2 =    0.2215 DF =    1 p-value =  0.6379 
+#&gt;  f =  0.0149 Ho =  0.4890 He =  0.4964
 # Chromosome X
 xSNP &lt;- c(A=10, B=20, AA=30, AB=20, BB=10)
 HardyWeinberg::HWChisq(xSNP,cc=0,x.linked=TRUE,verbose=TRUE)
 #&gt; Chi-square test for Hardy-Weinberg equilibrium (X-chromosomal)
-#&gt; Chi2 =  14.86111 DF = 2 p-value =  0.0005928581 D =  NA f =  0.25
+#&gt; Chi2 =   14.8611 DF =    2 p-value =  0.0006
 # HLA/DQR
 DQR &lt;- gap.datasets::hla[,3:4]
 a1 &lt;- DQR[1]
@@ -3517,7 +3514,7 @@ knitr::kable(model.wald,caption=&quot;Wald tests under GLMM on four SNPs&quot;)<
 </div>
 <div id="h2.jags" class="section level2" number="3.6">
 <h2><span class="header-section-number">3.6</span> h2.jags</h2>
-<p>The function uses JAGS (<a href="https://mcmc-jags.sourceforge.io/" class="uri">https://mcmc-jags.sourceforge.io/</a>) for heritability estimation<span class="citation"><sup>2</sup></span>,</p>
+<p>The function uses JAGS (<a href="https://mcmc-jags.sourceforge.io/" class="uri">https://mcmc-jags.sourceforge.io/</a>) for heritability estimation<span class="citation"><sup>1</sup></span>,</p>
 <pre class="r"><code>set.seed(1234567)
 meyer &lt;- within(gap.datasets::meyer,{
          y[is.na(y)] &lt;- rnorm(length(y[is.na(y)]),mean(y,na.rm=TRUE),sd(y,na.rm=TRUE))
@@ -3883,7 +3880,7 @@ ensembl &lt;- biomaRt::useMart(&quot;ensembl&quot;, dataset=&quot;hsapiens_gene_
 </div>
 <div id="experimental-factor-ontology-efo" class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> Experimental Factor Ontology (EFO)</h2>
-<p>The ontology of traits/disease is formally available as this<span class="citation"><sup>3</sup></span>. The script below assumes that efo-3.26.0 has been downloaded.</p>
+<p>The ontology of traits/disease is formally available as this<span class="citation"><sup>2</sup></span>. The script below assumes that efo-3.26.0 has been downloaded.</p>
 <pre class="r"><code>library(ontologyIndex)
 id &lt;- function(ontology)
 {
@@ -4028,22 +4025,22 @@ oeUpper
 syn
 </td>
 <td style="text-align:right;">
-185.590
+367.500
 </td>
 <td style="text-align:right;">
-183
+362
 </td>
 <td style="text-align:right;">
-0.14966
+0.15633
 </td>
 <td style="text-align:right;">
-0.98603
+0.98504
 </td>
 <td style="text-align:right;">
-0.873
+0.903
 </td>
 <td style="text-align:right;">
-1.115
+1.075
 </td>
 </tr>
 <tr>
@@ -4051,22 +4048,22 @@ syn
 mis
 </td>
 <td style="text-align:right;">
-496.520
+1012.600
 </td>
 <td style="text-align:right;">
-501
+999
 </td>
 <td style="text-align:right;">
--0.07147
+0.15583
 </td>
 <td style="text-align:right;">
-1.00900
+0.98659
 </td>
 <td style="text-align:right;">
-0.937
+0.936
 </td>
 <td style="text-align:right;">
-1.086
+1.040
 </td>
 </tr>
 <tr>
@@ -4074,22 +4071,22 @@ mis
 lof
 </td>
 <td style="text-align:right;">
-48.461
+92.797
 </td>
 <td style="text-align:right;">
-45
+101
 </td>
 <td style="text-align:right;">
 0.00000
 </td>
 <td style="text-align:right;">
-0.92859
+1.08840
 </td>
 <td style="text-align:right;">
-0.730
+0.925
 </td>
 <td style="text-align:right;">
-1.191
+1.284
 </td>
 </tr>
 </tbody>
@@ -4430,7 +4427,7 @@ FALSE
 <div id="additional-packages" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> Additional packages</h1>
 <p>Packages <code>gwasrapidd</code> provides easy access to the GWAS Catalog, while <code>rentrez</code> enables search for GenBank and PubMed.</p>
-<p>An overview on proteogenomics is available<span class="citation"><sup>4</sup></span>. Some aspects of the analysis is given by <code>pQTLtools</code>,
+<p>An overview on proteogenomics is available<span class="citation"><sup>3</sup></span>. Some aspects of the analysis is given by <code>pQTLtools</code>,
 <a href="https://jinghuazhao.github.io/pQTLtools/" class="uri">https://jinghuazhao.github.io/pQTLtools/</a>.</p>
 </div>
 <div id="gaawr2" class="section level1" number="6">
@@ -4466,28 +4463,25 @@ write.dcf(suggests)</code></pre>
 <p>Suggests: BLR, BGLR, biomaRt, bookdown, Cairo, EnsDb.Hsapiens.v75,
 ensembldb, GMMAT, HardyWeinberg, haplo.stats, httr, httpuv,
 jsonlite, kableExtra, knitr, MCMCglmm, plumber, powerEQTL,
-R2jags, regress, seqminer, SNPassoc, testthat, tidyr</p>
+R2jags, regress, Rsamtools, SNPassoc, testthat, tidyr</p>
 </div>
 <div id="summary" class="section level1" number="7">
 <h1><span class="header-section-number">7</span> Summary</h1>
-<p>Following part I of the talk, we have further explored various aspects of genetic association analysis in
+<p>Following the earlier talk, we have further explored various aspects of genetic association analysis in
 R, particularly in the context of computing systems like Linux. While these serve as a solid foundation,
 a more in-depth data analysis coupled with more rigorous development is surely fruitful and rewarding.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1>References</h1>
 <div id="refs" class="references csl-bib-body" line-spacing="2">
-<div id="ref-zhao09" class="csl-entry">
-<div class="csl-left-margin">1. </div><div class="csl-right-inline">Zhao, J. H. <a href="https://doi.org/10.69645/DCRY5578">Genetic association analysis with <span>R</span></a>. <em>The Biomedical &amp; Life Sciences Collection</em> <strong>2009</strong>, e1002430 (2009).</div>
-</div>
 <div id="ref-zhao18" class="csl-entry">
-<div class="csl-left-margin">2. </div><div class="csl-right-inline">Zhao, J. H., Luan, J. A. &amp; Congdon, P. <a href="https://doi.org/10.18637/jss.v085.i06">Bayesian linear mixed models with polygenic effects</a>. <em>Journal of Statistical Software</em> <strong>85</strong>, 1–27 (2018).</div>
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Zhao, J. H., Luan, J. A. &amp; Congdon, P. <a href="https://doi.org/10.18637/jss.v085.i06">Bayesian linear mixed models with polygenic effects</a>. <em>Journal of Statistical Software</em> <strong>85</strong>, 1–27 (2018).</div>
 </div>
 <div id="ref-malone10" class="csl-entry">
-<div class="csl-left-margin">3. </div><div class="csl-right-inline">Malone, J. <em>et al.</em> <a href="https://doi.org/10.1093/bioinformatics/btq099">Modeling sample variables with an experimental factor ontology</a>. <em>Bioinformatics</em> <strong>26</strong>, 1112–1118 (2010).</div>
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Malone, J. <em>et al.</em> <a href="https://doi.org/10.1093/bioinformatics/btq099">Modeling sample variables with an experimental factor ontology</a>. <em>Bioinformatics</em> <strong>26</strong>, 1112–1118 (2010).</div>
 </div>
 <div id="ref-suhre20" class="csl-entry">
-<div class="csl-left-margin">4. </div><div class="csl-right-inline">Suhre, K., McCarthy, M. I. &amp; Schwenk, J. M. Genetics meets proteomics: Perspectives for large population-based studies. <em>Nat Rev Genet</em> (2020) doi:<a href="https://doi.org/10.1038/s41576-020-0268-2">10.1038/s41576-020-0268-2</a>.</div>
+<div class="csl-left-margin">3. </div><div class="csl-right-inline">Suhre, K., McCarthy, M. I. &amp; Schwenk, J. M. Genetics meets proteomics: Perspectives for large population-based studies. <em>Nat Rev Genet</em> <a href="https://doi.org/10.1038/s41576-020-0268-2">https://doi.org/10.1038/s41576-020-0268-2</a> (2020) doi:<a href="https://doi.org/10.1038/s41576-020-0268-2">10.1038/s41576-020-0268-2</a>.</div>
 </div>
 </div>
 </div>

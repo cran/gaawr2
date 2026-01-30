@@ -21,6 +21,17 @@ invisible(suppressMessages(lapply(pkgs, require, character.only = TRUE)))
 sys_options <- options()
 new_options <- options(digits=2)
 
+## ----echo=FALSE, message=FALSE, warning=FALSE---------------------------------
+desc <- read.dcf(system.file("DESCRIPTION", package="gaawr2"))
+description <- desc[, "Description"]
+description <- gsub(
+  "(doi:[0-9\\.a-zA-Z]+/[0-9A-Z]+)",
+  "[\\1](https://doi.org/\\1)",
+  description
+)
+description <- gsub("\n+", " ", description)
+knitr::asis_output(description)
+
 ## ----welcome------------------------------------------------------------------
 print("Hello, world!\n")
 
