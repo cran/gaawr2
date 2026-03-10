@@ -12,12 +12,17 @@ knitr::opts_chunk$set(
 
 ## ----setup, message=FALSE, warning=FALSE--------------------------------------
 pkgs <- c("EnsDb.Hsapiens.v75","ensembldb","GMMAT","HardyWeinberg","MCMCglmm","SNPassoc","biomaRt",
-           "gap","gap.datasets","haplo.stats","powerEQTL","R2jags","regress",
-           "dplyr","ggplot2","httr","jsonlite","kableExtra","knitr","tidyr")
-for (p in pkgs) if (length(grep(paste("^package:", p, "$", sep=""), search())) == 0) {
-    if (!requireNamespace(p)) warning(paste0("This vignette needs package `", p, "'; please install"))
+          "gap","gap.datasets","haplo.stats","powerEQTL","R2jags","regress",
+          "dplyr","ggplot2","httr","jsonlite","kableExtra","knitr","tidyr")
+has_pkg <- function(x) requireNamespace(x, quietly = TRUE)
+installed <- pkgs[vapply(pkgs, has_pkg, logical(1))]
+missing <- setdiff(pkgs, installed)
+if (length(missing)) {
+  message("Missing packages: ", paste(missing, collapse = ", "))
 }
-invisible(suppressMessages(lapply(pkgs, require, character.only = TRUE)))
+invisible(lapply(installed, function(p)
+  suppressMessages(library(p, character.only = TRUE))
+))
 sys_options <- options()
 new_options <- options(digits=2)
 
@@ -241,7 +246,8 @@ for (design in designs)
 }
 legend("bottomright", inset=.02, title="Sample size (N)", paste(N), col=colors, horiz=FALSE, cex=0.8, lty=designs)
 
-## ----ensdb, messages=FALSE----------------------------------------------------
+## ----ensdb, eval=has_pkg("ensembldb") && has_pkg("EnsDb.Hsapiens.v75"), messages=FALSE----
+data("EnsDb.Hsapiens.v75", package="EnsDb.Hsapiens.v75")
 ensembldb::metadata(EnsDb.Hsapiens.v75)
 genes <- ensembldb::genes(EnsDb.Hsapiens.v75)
 head(genes)

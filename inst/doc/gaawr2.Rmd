@@ -4,9 +4,6 @@ output:
   bookdown::html_document2:
     toc: true
     toc_float: true
-    fig_caption: true
-    number_sections: true
-    self_contained: false
 fontsize: 11pt
 bibliography: '`r system.file("REFERENCES.bib", package="gaawr2")`'
 csl: '`r system.file("csl", "nature-genetics.csl", package = "gaawr2")`'
@@ -33,12 +30,17 @@ knitr::opts_chunk$set(
 
 ```{r setup, message=FALSE, warning=FALSE}
 pkgs <- c("EnsDb.Hsapiens.v75","ensembldb","GMMAT","HardyWeinberg","MCMCglmm","SNPassoc","biomaRt",
-           "gap","gap.datasets","haplo.stats","powerEQTL","R2jags","regress",
-           "dplyr","ggplot2","httr","jsonlite","kableExtra","knitr","tidyr")
-for (p in pkgs) if (length(grep(paste("^package:", p, "$", sep=""), search())) == 0) {
-    if (!requireNamespace(p)) warning(paste0("This vignette needs package `", p, "'; please install"))
+          "gap","gap.datasets","haplo.stats","powerEQTL","R2jags","regress",
+          "dplyr","ggplot2","httr","jsonlite","kableExtra","knitr","tidyr")
+has_pkg <- function(x) requireNamespace(x, quietly = TRUE)
+installed <- pkgs[vapply(pkgs, has_pkg, logical(1))]
+missing <- setdiff(pkgs, installed)
+if (length(missing)) {
+  message("Missing packages: ", paste(missing, collapse = ", "))
 }
-invisible(suppressMessages(lapply(pkgs, require, character.only = TRUE)))
+invisible(lapply(installed, function(p)
+  suppressMessages(library(p, character.only = TRUE))
+))
 sys_options <- options()
 new_options <- options(digits=2)
 ```
@@ -295,7 +297,7 @@ for (i in 1:4) haploH[[i]] <- haplo.stats::haplo.score.slide(asthma.snps$cc, gen
 
 We return to the asthma data used in **SNPassoc**.
 
-```r
+```
 assoc <- SNPassoc::WGassociation(cc, data=asthma.snps)
 assoc.adj <- SNPassoc::WGassociation(cc ~ country + smoke, asthma.snps)
 assoc.maxstat <- SNPassoc::maxstat(asthma.snps, cc)
@@ -412,7 +414,8 @@ The counterpart for single-cell RNA-Seq design is via `powerEQTL.scRNAseq`.
 
 ## EnsDb.Hsapiens.v75
 
-```{r ensdb, messages=FALSE}
+```{r ensdb, eval=has_pkg("ensembldb") && has_pkg("EnsDb.Hsapiens.v75"), messages=FALSE}
+data("EnsDb.Hsapiens.v75", package="EnsDb.Hsapiens.v75")
 ensembldb::metadata(EnsDb.Hsapiens.v75)
 genes <- ensembldb::genes(EnsDb.Hsapiens.v75)
 head(genes)
@@ -423,7 +426,7 @@ One can also use `exons_data <- ensembldb::exons(EnsDb.Hsapiens.v75);head(exons_
 
 ## biomaRt
 
-```r
+```
 if (!biomaRt::martBMCheck(mart)) {
   stop("The BioMart service is currently unavailable.")
 }
@@ -444,7 +447,7 @@ ensembl <- biomaRt::useMart("ensembl", dataset="hsapiens_gene_ensembl")
 
 The ontology of traits/disease is formally available as this @malone10. The script below assumes that efo-3.26.0 has been downloaded.
 
-```r
+```
 library(ontologyIndex)
 id <- function(ontology)
 {

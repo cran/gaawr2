@@ -1,8 +1,24 @@
+## gaawr2 0.0.7
+
+(2026/3/10)
+
+* It is unclear CRAN will follow shinygap.Rmd practice so use inst/doc instead.
+  - Consequently, this line is dropped from DESCRIPTION: VignetteBuilder: knitr.
+* Rework on gaawr2.Rmd/web.Rmd bookdown dependency which causes errors at CRAN.
+
+## gaawr2 0.0.6
+
+(2026/3/9)
+
+* Amend gaawr2.Rmd/web.Rmd.
+* Revise DESCRIPTION/Description.
+
 ## gaawr2 0.0.5
 
 (2026/1/30)
 
-* Replace CRAN-archived seqminer with Rsamples.
+* On CRAN.
+* Replace CRAN-archived seqminer with Rsamtools.
 
 ## gaawr2 0.0.4
 
