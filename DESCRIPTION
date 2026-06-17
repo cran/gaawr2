@@ -1,7 +1,7 @@
 Package: gaawr2
 Title: Genetic Association Analysis
-Version: 0.0.7
-Date: 2026-3-10
+Version: 0.0.8
+Date: 2026-6-17
 Authors@R: c(person("Jing Hua", "Zhao", , role = c("aut", "cre"),
                   email = "jinghuazhao@hotmail.com",
                   comment = c(ORCID = "https://orcid.org/0000-0002-1463-5870", ORCID = "0000-0003-4930-3582")),
@@ -23,20 +23,22 @@ Encoding: UTF-8
 Depends: R (>= 3.5.0)
 Imports: dplyr, gap, gap.datasets, ggplot2, survival, Rdpack
 RdMacros: Rdpack
+VignetteBuilder: knitr
 LazyData: Yes
 LazyLoad: Yes
 LazyDataCompression: xz
 Suggests: BLR, BGLR, biomaRt, bookdown, Cairo, EnsDb.Hsapiens.v75,
-        ensembldb, GMMAT, HardyWeinberg, haplo.stats, httr, httpuv,
-        jsonlite, kableExtra, knitr, MCMCglmm, plumber, powerEQTL,
-        R2jags, regress, Rsamtools, SNPassoc, testthat, tidyr
-RoxygenNote: 7.3.3
+        ensembldb, GMMAT, HardyWeinberg, haplo.stats, htmltools, httr,
+        httpuv, jsonlite, kableExtra, knitr, MCMCglmm, plumber,
+        powerEQTL, R2jags, regress, Rsamtools, SNPassoc, testthat,
+        tidyr
+Config/roxygen2/version: 8.0.0
 NeedsCompilation: no
-Packaged: 2026-03-10 11:12:37 UTC; jhz22
+Packaged: 2026-06-17 17:10:58 UTC; jhz22
 Author: Jing Hua Zhao [aut, cre] (ORCID:
     <https://orcid.org/0000-0002-1463-5870>, ORCID:
     <https://orcid.org/0000-0003-4930-3582>),
   Benjamin Altmann [ctb],
   Brian Ripley [ctb]
 Repository: CRAN
-Date/Publication: 2026-03-10 11:40:07 UTC
+Date/Publication: 2026-06-17 18:00:11 UTC
