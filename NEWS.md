@@ -1,6 +1,17 @@
+## gaawr2 0.0.9
+
+(2026/10/23)
+
+* Adapt ~/R/docs/gaawr2.sh as cran.sh.
+* Add to guard the tests/ runner, and suggest rmarkdown.
+* Employ _R_CHECK_DEPENDS_ONLY_=true R CMD check as suggested by Prof Brian Ripley.
+* Employ VignetteBuilder: knitr, rmarkdown, bookdown.
+* Fix VignetteIndexEntry()/style="width:100%" in {gaawr2, web}_cran.Rmd.
+* Integration of parent/child in {gaawr2, web}.Rmd.
+
 ## gaawr2 0.0.8
 
-(2026/6/17)
+(2026/6/17, CRAN)
 
 * Amend _pkgdown.yml with gaawr2/web as articles rather than menu items.
 * Create `"{gaawr2, web}_cran.Rmd"` to enable direct access from CRAN.
